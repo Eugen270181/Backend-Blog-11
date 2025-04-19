@@ -1,0 +1,1 @@
+{"version":3,"file":"emailExamples.js","sourceRoot":"","sources":["../../../src/common/adapters/emailExamples.ts"],"names":[],"mappings":";;;AAAa,QAAA,aAAa,GAAG;IACzB,iBAAiB,CAAC,IAAY;QAC1B,OAAO;;qEAEsD,IAAI;mBACtD,CAAA;IACf,CAAC;IACD,8BAA8B,CAAC,IAAY;QACvC,OAAO;;kEAEmD,IAAI;iBACrD,CAAC;IACd,CAAC;IACD,qBAAqB,CAAC,IAAY;QAC9B,OAAO;;2EAE4D,IAAI;aAClE,CAAA;IACT,CAAC;CACJ,CAAA"}
