@@ -11,8 +11,8 @@ export class BlogsRepository {
     async save(blogDocument: BlogDocument):Promise<void> {
         await blogDocument.save();
     }
-    async findBlogById(id: string):Promise< BlogDocument | null > {
-        return this.blogModel.findOne({ _id: id , deletedAt: null }).catch(()=> null )
+    async findBlogById(_id: string):Promise< BlogDocument | null > {
+        return this.blogModel.findOne({ _id, deletedAt: null }).catch(()=> null )
     }
 }
 

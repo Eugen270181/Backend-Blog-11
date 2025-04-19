@@ -3,7 +3,7 @@ import {Model, Schema} from "mongoose";
 
 export type RequestsLogModelType = Model<RequestsLog>
 
-export type RequestsLog = {
+export class RequestsLog {
     ip: string
     url: string
     date: Date

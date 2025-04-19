@@ -12,7 +12,20 @@ export class PostsRepository {
     async save(post: PostDocument): Promise<void> {
         await post.save()
     }
-    async findPostById(id: string):Promise< PostDocument | null > {
-        return this.postModel.findOne({ _id: id , deletedAt:null}).catch(()=> null )
+    async findPostById(_id: string):Promise< PostDocument | null > {
+        return this.postModel.findOne({ _id , deletedAt:null}).catch(()=> null )
     }
+    async increaseLikeCounter(_id: string){
+        await this.postModel.updateOne( { _id , deletedAt:null}, { $inc: { likeCount: 1 } } )
+    }
+    async decreaseLikeCounter(_id: string){
+        await this.postModel.updateOne( { _id , deletedAt:null}, { $inc: { likeCount: -1 } } )
+    }
+    async increaseDislikeCounter(_id: string){
+        await this.postModel.updateOne( { _id , deletedAt:null}, { $inc: { dislikeCount: 1 } } )
+    }
+    async decreaseDislikeCounter(_id: string){
+        await this.postModel.updateOne( { _id , deletedAt:null}, { $inc: { dislikeCount: -1 } } )
+    }
+
 }

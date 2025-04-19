@@ -1,4 +1,4 @@
 export type NewPasswordRecoveryInputModel = {
-    newPassword:	string,
+    newPassword: string,
     recoveryCode: string
 }

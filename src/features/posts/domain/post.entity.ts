@@ -18,6 +18,8 @@ export class Post {
     blogName: string
     createdAt: Date
     deletedAt: Date | null
+    likeCount: number = 0
+    dislikeCount: number = 0
 
     static createPostDocument({title, shortDescription, content, blogId, blogName}: IPostDto) {
         const post = new this()
@@ -52,7 +54,9 @@ export const postSchema:Schema<Post> = new Schema<Post>({
     blogId: { type: String, required: true }, // valid
     blogName: { type: String, required: true },
     createdAt: { type: Date, required: true },
-    deletedAt: { type: Date, nullable:true, default: null }
+    deletedAt: { type: Date, nullable:true, default: null },
+    likeCount: { type: Number, required: true, default: 0 },
+    dislikeCount: { type: Number, required: true, default: 0 }
 })
 
 postSchema.loadClass(Post)

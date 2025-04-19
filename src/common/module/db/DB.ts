@@ -11,7 +11,8 @@ import {
 import {Session, SessionModelType, sessionSchema} from "../../../features/security/domain/session.entity";
 import {User, UserModelType, userSchema} from "../../../features/users/domain/user.entity";
 import {Comment, CommentModelType, commentSchema} from "../../../features/comments/domain/comment.entity";
-import {Like, LikeModelType, likeSchema} from "../../../features/likes/domain/like.entity";
+import {LikeComment, LikeCommentModelType, likeCommentSchema} from "../../../features/likes/domain/likeComment.entity";
+import {LikePost, LikePostModelType, likePostSchema} from "../../../features/likes/domain/likePost.entity";
 
 
 export class DB {
@@ -53,13 +54,14 @@ export class DB {
     // Метод для получения моделей коллекций
     getModels() {
         return {
-            BlogModel: mongoose.model<Blog, BlogModelType>(appConfig.BLOGS_COLLECTION_NAME,blogSchema),
-            PostModel: mongoose.model<Post, PostModelType>(appConfig.POSTS_COLLECTION_NAME, postSchema),
-            CommentModel: mongoose.model<Comment, CommentModelType>(appConfig.COMMENTS_COLLECTION_NAME, commentSchema),
-            UserModel: mongoose.model<User, UserModelType>(appConfig.USERS_COLLECTION_NAME, userSchema),
-            RequestsLogModel: mongoose.model<RequestsLog, RequestsLogModelType>(appConfig.REQUESTS_COLLECTION_NAME, requestsLogSchema),
-            SessionModel: mongoose.model<Session, SessionModelType>(appConfig.SESSIONS_COLLECTION_NAME, sessionSchema),
-            LikeModel: mongoose.model<Like, LikeModelType>(appConfig.LIKES_COLLECTION_NAME, likeSchema),
+            BlogModel: mongoose.model<Blog, BlogModelType>(Blog.name,blogSchema),
+            PostModel: mongoose.model<Post, PostModelType>(Post.name, postSchema),
+            CommentModel: mongoose.model<Comment, CommentModelType>(Comment.name, commentSchema),
+            UserModel: mongoose.model<User, UserModelType>(User.name, userSchema),
+            RequestsLogModel: mongoose.model<RequestsLog, RequestsLogModelType>(RequestsLog.name, requestsLogSchema),
+            SessionModel: mongoose.model<Session, SessionModelType>(Session.name, sessionSchema),
+            LikeCommentModel: mongoose.model<LikeComment, LikeCommentModelType>(LikeComment.name, likeCommentSchema),
+            LikePostModel: mongoose.model<LikePost, LikePostModelType>(LikePost.name, likePostSchema),
             //...all collections
         }
     }

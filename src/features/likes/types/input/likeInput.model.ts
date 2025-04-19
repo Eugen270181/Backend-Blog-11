@@ -1,4 +1,4 @@
-import {LikeStatus} from "../../domain/like.entity";
+import {LikeStatus} from "../../../../common/types/enum/likeStatus";
 
 export type LikeInputModel = {
     likeStatus: LikeStatus

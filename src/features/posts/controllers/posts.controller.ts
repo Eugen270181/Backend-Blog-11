@@ -22,13 +22,17 @@ import {CommentsServices} from "../../comments/services/commentsServices";
 import {CommentsQueryRepository} from "../../comments/repositories/commentsQueryRepository";
 import {pagCommentOutputModel} from "../../comments/types/output/pagCommentOutput.model";
 import {ResultStatus} from "../../../common/types/enum/resultStatus";
+import {LikeInputModel} from "../../likes/types/input/likeInput.model";
+import {LikesCommentsServices} from "../../likes/services/likesCommentsServices";
+import {LikesPostsServices} from "../../likes/services/likesPostsServices";
 
 
 export class PostsController {
     constructor( private postsServices: PostsServices,
                  private postsQueryRepository: PostsQueryRepository,
                  private commentsServices: CommentsServices,
-                 private commentsQueryRepository: CommentsQueryRepository) {}
+                 private commentsQueryRepository: CommentsQueryRepository,
+                 private likesPostsServices: LikesPostsServices) {}
 
     async createPostController (req: RequestWithBody<CreatePostInputModel>, res: Response<PostOutputModel>) {
         const newPostId = await this.postsServices.createPost(req.body)
@@ -90,5 +94,20 @@ export class PostsController {
 
         return res.status(HttpStatus.Success).send(foundComments)
     }
+    //метод обновления лайка связанного с постом и пользователем
+    async updatePostLikeController (req: RequestWithParamsAndBodyAndUserId<IdType, LikeInputModel, IdType>, res: Response) {
+        const userId = req.user?.userId as string;
+        const postId = req.params.id
+        const {likeStatus} = req.body
+
+        const updateResult = await this.likesPostsServices.updatePostLike({likeStatus}, postId, userId)
+
+        if (updateResult===ResultStatus.BadRequest) return res.sendStatus(HttpStatus.BadRequest)
+        if (updateResult===ResultStatus.Unauthorized) return res.sendStatus(HttpStatus.Unauthorized)
+        if (updateResult===ResultStatus.NotFound) return res.sendStatus(HttpStatus.NotFound)
+
+        return res.sendStatus(HttpStatus.NoContent)
+    }
+
 }
 

@@ -3,16 +3,19 @@ import {blogValidators} from './middlewares/blogValidators'
 import {adminMiddleware} from '../../common/middleware/adminMiddleware'
 import {querySortSanitizers} from "../../common/middleware/querySortSanitizerMiddleware";
 import {blogPostValidators} from "../../common/middleware/postValidatonMiddleware";
-import {blogsController} from "../../ioc";
+import {ioc} from "../../ioc";
+import {BlogsController} from "./controllers/blogs.controller";
 
 export const blogsRouter = Router()
 
-blogsRouter.get('/', ...querySortSanitizers, blogsController.getBlogsController.bind(blogsController))
-blogsRouter.get('/:id', blogsController.findBlogController.bind(blogsController))
-blogsRouter.get('/:id/posts', ...querySortSanitizers, blogsController.findBlogPostsController.bind(blogsController))//new - task-04
-blogsRouter.post('/:id/posts', adminMiddleware,...blogPostValidators, blogsController.createBlogPostController.bind(blogsController))//new - task-04
-blogsRouter.post('/', adminMiddleware,...blogValidators, blogsController.createBlogController.bind(blogsController))
-blogsRouter.delete('/:id', adminMiddleware, blogsController.delBlogController.bind(blogsController))
-blogsRouter.put('/:id', adminMiddleware, ...blogValidators, blogsController.updateBlogController.bind(blogsController))
+const blogsControllerInstance = ioc.getInstance<BlogsController>(BlogsController)
+
+blogsRouter.get('/', ...querySortSanitizers, blogsControllerInstance.getBlogsController.bind(blogsControllerInstance))
+blogsRouter.get('/:id', blogsControllerInstance.findBlogController.bind(blogsControllerInstance))
+blogsRouter.get('/:id/posts', ...querySortSanitizers, blogsControllerInstance.findBlogPostsController.bind(blogsControllerInstance))//new - task-04
+blogsRouter.post('/:id/posts', adminMiddleware,...blogPostValidators, blogsControllerInstance.createBlogPostController.bind(blogsControllerInstance))//new - task-04
+blogsRouter.post('/', adminMiddleware,...blogValidators, blogsControllerInstance.createBlogController.bind(blogsControllerInstance))
+blogsRouter.delete('/:id', adminMiddleware, blogsControllerInstance.delBlogController.bind(blogsControllerInstance))
+blogsRouter.put('/:id', adminMiddleware, ...blogValidators, blogsControllerInstance.updateBlogController.bind(blogsControllerInstance))
 
 // не забудьте добавить роут в апп

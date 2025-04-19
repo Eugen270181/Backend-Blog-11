@@ -1,3 +1,6 @@
+import {LikeStatus} from "../../../../common/types/enum/likeStatus";
+import {ExtendedLikesInfoOutputModel} from "../../../likes/types/output/extendedLikesInfoOutputModel";
+
 export type PostOutputModel = {
   id: string;
   title: string; // max 30
@@ -6,4 +9,5 @@ export type PostOutputModel = {
   blogId: string; // valid
   blogName: string;
   createdAt: string;
-};
+  extendedLikesInfo: ExtendedLikesInfoOutputModel;
+}

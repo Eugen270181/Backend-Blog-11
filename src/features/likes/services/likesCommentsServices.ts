@@ -1,45 +1,46 @@
-import {LikesRepository} from "../repository/likesRepository";
+import {LikesCommentsRepository} from "../repository/likesCommentsRepository";
 import {ResultStatus} from "../../../common/types/enum/resultStatus";
 import {LikeInputModel} from "../types/input/likeInput.model";
 import {UsersRepository} from "../../users/repositories/usersRepository";
 import {CommentsRepository} from "../../comments/repositories/commentsRepository";
-import {ILikeDto, Like, LikeDocument, LikeStatus} from "../domain/like.entity";
+import {ILikeCommentDto, LikeComment, LikeCommentDocument} from "../domain/likeComment.entity";
+import {LikeStatus} from "../../../common/types/enum/likeStatus";
 
 
-export class LikesServices {
-    constructor(private likesRepository: LikesRepository,
+export class LikesCommentsServices {
+    constructor(private likesCommentsRepository: LikesCommentsRepository,
                 private usersRepository: UsersRepository,
                 private commentsRepository: CommentsRepository) {}
     async updateCommentLike(likeInput: LikeInputModel, commentId:string, userId:string) {
-        const newLikeStatus = likeInput.likeStatus
-        if (!(newLikeStatus in LikeStatus)) return ResultStatus.BadRequest;
+        const newLikeCommentStatus = likeInput.likeStatus
+        if (!(newLikeCommentStatus in LikeStatus)) return ResultStatus.BadRequest;
 
         const foundUserDocument= await this.usersRepository.findUserById(userId)
         if (!foundUserDocument) return  ResultStatus.Unauthorized;//401 error
         const foundCommentDocument= await this.commentsRepository.findCommentById(commentId)
         if (!foundCommentDocument) return ResultStatus.NotFound;//404 error
 
-        //logic found and update or create new like
-        const foundLikeDocument= await this.likesRepository.findLikeByAuthorIdAndParentId(userId, commentId)
+        //logic found and update or create new likeCommentDocument
+        const foundLikeCommentDocument= await this.likesCommentsRepository.findLikeCommentByAuthorIdAndCommentId(userId, commentId)
         let oldLikeStatus:LikeStatus = LikeStatus.None
 
-        if (foundLikeDocument) {
-            oldLikeStatus = foundLikeDocument.status
-            foundLikeDocument.updateLike(newLikeStatus)
-            foundLikeDocument.save()
-        } else {//создание документа лайка
-            const LikeDto:ILikeDto = {authorId: userId, parentId: commentId, status: newLikeStatus};
-            const newLikeDocument:LikeDocument = await Like.createLikeDocument(LikeDto)
-            await this.likesRepository.save(newLikeDocument)
+        if (foundLikeCommentDocument) {
+            oldLikeStatus = foundLikeCommentDocument.status
+            foundLikeCommentDocument.updateLikeComment(newLikeCommentStatus)
+            foundLikeCommentDocument.save()
+        } else {//создание документа лайка комментария
+            const LikeCommentDto:ILikeCommentDto = {authorId: userId, commentId: commentId, status: newLikeCommentStatus};
+            const newLikeCommentDocument:LikeCommentDocument = await LikeComment.createLikeCommentDocument(LikeCommentDto)
+            await this.likesCommentsRepository.save(newLikeCommentDocument)
         }
-        //update or no Like/Dislike counters foundCommentDocument
-        await this.updateCommentsLikeCounters(oldLikeStatus, newLikeStatus, commentId)
+        //update or no LikeComment/Dislike counters foundCommentDocument
+        await this.updateCommentLikeCounters(oldLikeStatus, newLikeCommentStatus, commentId)
         //console.log(`updateCommentLike:${userId}:${commentId}:${oldLikeStatus}:${newLikeStatus}`)
 
         return ResultStatus.NoContent
     }
 
-    private async updateCommentsLikeCounters(oldLikeStatus: LikeStatus, newLikeStatus: LikeStatus, commentId:string) {
+    private async updateCommentLikeCounters(oldLikeStatus: LikeStatus, newLikeStatus: LikeStatus, commentId:string) {
         if (oldLikeStatus===newLikeStatus) return false //если ошибочно фронт прислал тотже статус лайка
 
         if (oldLikeStatus===LikeStatus.None) {

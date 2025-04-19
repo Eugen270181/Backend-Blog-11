@@ -6,7 +6,7 @@ const EmailConfirmationValidator = async (email: string) => {
     const user = await usersRepository.findUserByEmail(email);
 
     if (!user) throw new Error("Users account with this Email not found!")
-    if (user.emailConfirmation.isConfirmed) throw new Error("Users account with this email already activated!")
+    if (user.isConfirmed) throw new Error("Users account with this email already activated!")
 
     return true
 }

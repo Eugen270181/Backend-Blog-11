@@ -5,7 +5,7 @@ import {emailExamples} from "./emailExamples";
 
 export const nodemailerServices = {
 
-    async sendEmail(email: string, content: string ): Promise<boolean> {
+    async sendEmail(email: string, content: string ) {
         let transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
@@ -21,7 +21,8 @@ export const nodemailerServices = {
             html: content, // html body
         });
 
-        return !!info;
 
+
+        return !!info
     }
 }

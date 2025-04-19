@@ -18,5 +18,6 @@ export const accessTokenMiddleware = async (req: Request, res: Response, next: N
     }
 
     if (req.method === 'GET') return next()
+
     return res.sendStatus(HttpStatus.Unauthorized)
 }

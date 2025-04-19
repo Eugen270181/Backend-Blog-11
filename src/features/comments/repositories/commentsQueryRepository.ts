@@ -2,16 +2,16 @@ import {WithId} from "mongodb"
 import {SortQueryFilterType} from "../../../common/types/sortQueryFilter.type";
 import {CommentOutputModel} from "../types/output/commentOutput.model";
 import {Comment, CommentModelType} from "../domain/comment.entity";
-import {LikeStatus} from "../../likes/domain/like.entity";
-import {LikesRepository} from "../../likes/repository/likesRepository";
+import {LikesCommentsRepository} from "../../likes/repository/likesCommentsRepository";
 import {db} from "../../../ioc";
 import {DB} from "../../../common/module/db/DB";
+import {LikeStatus} from "../../../common/types/enum/likeStatus";
 
 export class CommentsQueryRepository {
     private commentModel:CommentModelType
 
     constructor(private db: DB,
-                private likesRepository: LikesRepository) {
+                private likesCommentsRepository: LikesCommentsRepository) {
         this.commentModel = db.getModels().CommentModel
     }
     async findCommentById(_id: string):Promise< WithId<Comment> | null > {
@@ -22,15 +22,15 @@ export class CommentsQueryRepository {
         return comment?this.mapComment(comment, userId):null
     }
     async getCommentsAndMap(query:SortQueryFilterType, postId?:string, userId?:string) {
-        const search = postId?{postId, deletedAt:null}:{deletedAt:null}
+        const filter = postId?{postId, deletedAt:null}:{deletedAt:null}
         try {
             const comments = await this.commentModel
-                .find(search)
+                .find(filter)
                 .sort({[query.sortBy]:query.sortDirection})
                 .skip((query.pageNumber-1)*query.pageSize)
                 .limit(query.pageSize)
                 .lean()
-            const totalCount = await this.commentModel.countDocuments(search)
+            const totalCount = await this.commentModel.countDocuments(filter)
             const itemsPromisses =  comments.map(el => this.mapComment(el, userId))
             const items = await Promise.all(itemsPromisses)//асинхронно, не последовательно забираем выполненые промисы
             //const items = comments.map(async (el) => {return this.mapComment(el, userId)})
@@ -50,7 +50,7 @@ export class CommentsQueryRepository {
     }
     async mapComment(comment:WithId<Comment>, userId?:string) {
         const myStatus= await this.checkMyLikeStatus(comment._id.toString(), userId)
-        //console.log(`mystatus:${myStatus}:userId:${userId as string}:commentId:${comment._id.toString()}`)
+
         return {
             id : comment._id.toString(),
             content : comment.content,
@@ -66,7 +66,7 @@ export class CommentsQueryRepository {
     async checkMyLikeStatus(commentId:string, userId?:string) {
         if (!userId) return LikeStatus.None
 
-        const myStatus = await this.likesRepository.findLikeByAuthorIdAndParentId(userId, commentId)
+        const myStatus = await this.likesCommentsRepository.findLikeCommentByAuthorIdAndCommentId(userId, commentId)
 
         return myStatus?myStatus.status:LikeStatus.None
     }

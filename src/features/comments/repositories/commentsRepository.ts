@@ -1,7 +1,7 @@
 import {CommentDocument, CommentModelType} from "../domain/comment.entity";
 import {db} from "../../../ioc";
 import {DB} from "../../../common/module/db/DB";
-import {LikesRepository} from "../../likes/repository/likesRepository";
+import {LikesCommentsRepository} from "../../likes/repository/likesCommentsRepository";
 
 
 export class CommentsRepository {

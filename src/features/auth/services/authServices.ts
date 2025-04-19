@@ -19,13 +19,14 @@ import {ISessionDto, Session} from "../../security/domain/session.entity";
 import {ExtLoginSuccessOutputModel} from "../types/output/extLoginSuccessOutput.model";
 import {durationMapper} from "../../../common/module/durationMapper";
 import {UsersServices} from "../../users/services/usersServices";
+import {RandomCodeServices} from "../../../common/adapters/randomCodeServices";
 
 export class AuthServices {
 
     constructor( private securityServices: SecurityServices,
                  private securityRepository: SecurityRepository,
                  private usersServices: UsersServices,
-                 private usersRepository: UsersRepository, ) {}
+                 private usersRepository: UsersRepository, ) {} //TODO Mocks NodeMailer DI
     async loginUser(login:LoginInputModel,ip:string,title:string) {
         let result = new ResultClass<ExtLoginSuccessOutputModel>()
         const {loginOrEmail, password} = login
@@ -37,7 +38,7 @@ export class AuthServices {
             return result
         }
         //если данные для входа валидны, то генеирруем deviceId и токены RT и AT, кодируя в RT payload {userId,deviceId}
-        const deviceId = randomUUID()
+        const deviceId = RandomCodeServices.genRandomCode()
         const userId = user.data!._id.toString()
         //если данные для входа валидны, то генеирруем токены для пользователя и его deviceId
         result = await this.generateTokens(userId,deviceId)
@@ -178,7 +179,7 @@ export class AuthServices {
         await this.usersRepository.save(newUser);
 
         nodemailerServices
-            .sendEmail(newUser.email, newUser.emailConfirmation.confirmationCode)
+            .sendEmail( newUser.email, emailExamples.registrationEmail(newUser.emailConfirmation!.confirmationCode) )
             .catch((er) => console.error('error in send email:', er));
 
         result.status = ResultStatus.Success
@@ -191,19 +192,19 @@ export class AuthServices {
             result.addError("Users account with this Email not found!", "email")
             return result
         }
-        if (user.emailConfirmation.isConfirmed) {
+        if (user.isConfirmed) {
             result.addError('Users account with this email already activated!','email')
             return result
         }
-        const newConfirmationCode = randomUUID()
-        const newConfirmationDate =add( new Date(), durationMapper(appConfig.EMAIL_TIME) )
+        const newConfirmationCode =  RandomCodeServices.genRandomCode()
+        const newConfirmationDate = add( new Date(), durationMapper(appConfig.EMAIL_TIME) )
         const isUpdateConfirmationCode = await this.usersServices.setRegConfirmationCode(user._id.toString(),newConfirmationCode,newConfirmationDate)
         if (!isUpdateConfirmationCode) {
             result.addError('Something wrong with activate your account, try later','email')
             return result
         }
         nodemailerServices
-          .sendEmail(email, emailExamples.registrationEmail(newConfirmationCode))
+          .sendEmail(email, emailExamples.resendingCodeRegistrationEmail(newConfirmationCode))
           .catch((er) => console.error('error in send email:', er));
 
         result.status = ResultStatus.Success
@@ -217,11 +218,11 @@ export class AuthServices {
             result.addError('confirmation code is incorrect','code')
             return result
         }
-        if (user.emailConfirmation.isConfirmed) {
+        if (user.isConfirmed) {
             result.addError('confirmation code already been applied','code')
             return result
         }
-        if (user.emailConfirmation.expirationDate < new Date()) {
+        if (user.emailConfirmation!.expirationDate < new Date()) {
             result.addError('confirmation code is expired','code')
             return result
         }
@@ -240,8 +241,8 @@ export class AuthServices {
         const result = new ResultClass()
         const user = await this.usersRepository.findUserByEmail(email)
         if (user) {
-            const newConfirmationCode = randomUUID()
-            const newConfirmationDate = add(new Date(), durationMapper(appConfig.EMAIL_TIME))
+            const newConfirmationCode = RandomCodeServices.genRandomCode()
+            const newConfirmationDate = add(new Date(), durationMapper(appConfig.PASS_TIME))
             const isUpdateConfirmationCode = await this.usersServices.setPassConfirmationCode(user._id.toString(), newConfirmationCode, newConfirmationDate)
             if (!isUpdateConfirmationCode) {
                 result.addError('Something wrong with recover your password, try later', 'email')
@@ -263,7 +264,7 @@ export class AuthServices {
             result.addError('Password confirmation code is incorrect','code')
             return result
         }
-        if (user.passConfirmation.expirationDate < new Date()) {
+        if (user.passConfirmation!.expirationDate < new Date()) {
             result.addError('Password confirmation code is expired','recoveryCode')
             return result
         }
