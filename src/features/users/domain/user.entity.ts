@@ -4,6 +4,8 @@ import {HydratedDocument, Model, Schema} from "mongoose";
 
 import {db} from "../../../ioc";
 import {RandomCodeServices} from "../../../common/adapters/randomCodeServices";
+import {durationMapper} from "../../../common/module/durationMapper";
+import {appConfig} from "../../../common/settings/config";
 
 
 export interface IUserDto {
@@ -48,10 +50,7 @@ export class User {
     static createUserByReg({ login, email, hash }:IUserDto) {
         const userDocument = this.createUserBySa({ login, email, hash })
         userDocument.isConfirmed = false
-        userDocument.emailConfirmation = {
-            confirmationCode: RandomCodeServices.genRandomCode(),
-            expirationDate: add(new Date(), {hours:1, minutes:30})
-        }
+        userDocument.setRegConfirmationCode(RandomCodeServices.genRandomCode(), add(new Date(), durationMapper(appConfig.EMAIL_TIME)))
 
         return userDocument
     }

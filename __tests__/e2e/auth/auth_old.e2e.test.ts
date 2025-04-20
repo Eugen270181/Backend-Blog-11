@@ -53,22 +53,14 @@ describe(`<<AUTH>> ENDPOINTS TESTING!!!`, ()=>{
     const spySendEmail = jest.spyOn(nodemailerServices,'sendEmail').mockResolvedValue(true)
     const spyRateLimit = jest.spyOn(countHelper,"rateCountFunction")
     const UserModel = db.getModels().UserModel;
-    // const originalSetRegConfirmationCode = UserModel.prototype.setRegConfirmationCode
-    // const mockedSetRegConfirmationCode = jest.fn(
-    //     function (code, date) {
-    //         this.emailConfirmation = {
-    //             confirmationCode: code,
-    //             expirationDate: new Date("1970-01-01")
-    //         };
-    //     }
-    // );
+
     const mockedSetRegConfirmationCode = jest.fn(function (code, date) {
         this.emailConfirmation = {
             confirmationCode: code,
             expirationDate: date, // <-- исправлено здесь
         };
     });
-
+8
     const mockSetCodeDateRegConfirm = (code?:string, date?:Date) => {
         mockedSetRegConfirmationCode.mockImplementation(function (c, d) {
             console.log(code)
