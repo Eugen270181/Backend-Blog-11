@@ -1,6 +1,5 @@
-
-
 export function durationMapper(duration: string) {
+
     const units: { [key: string]: string } = {
         s: 'seconds',
         m: 'minutes',

@@ -1,8 +1,9 @@
+import {ADMIN_LOGIN, ADMIN_PASS} from "../../../src/common/middleware/guardMiddlewares";
+
 const request = require("supertest");
 //import request from "supertest";
 import {initApp} from "../../../src/initApp";
 import {routersPaths} from "../../../src/common/settings/paths";
-import {ADMIN_LOGIN, ADMIN_PASS} from "../../../src/common/middleware/adminMiddleware";
 import {appConfig} from "../../../src/common/settings/config";
 import {BlogOutputModel} from "../../../src/features/blogs/types/output/blogOutput.model";
 import {OutputErrorsType} from "../../../src/common/types/outputErrors.type";
@@ -43,7 +44,6 @@ describe(`<<BLOGS>> ENDPOINTS TESTING!!!`, ()=>{
     let newBlog: BlogOutputModel;
     let updatedBlog: BlogOutputModel;
     let newBlogId: string;
-
 
     describe(`POST -> "/blogs":`, ()=>{
 

@@ -20,7 +20,7 @@ export class CommentsController {
                 private commentsQueryRepository: CommentsQueryRepository,
                 private likesCommentsServices: LikesCommentsServices,
                 ) {}
-    async delCommentController (req: RequestWithParamsAndUserId<IdType,IdType>, res: Response) {
+    delCommentController = async (req: RequestWithParamsAndUserId<IdType,IdType>, res: Response) => {
         const userId = req.user?.userId as string
         const commentId = req.params.id
         const deleteResult = await this.commentsServices.deleteComment(commentId,userId)
@@ -30,7 +30,7 @@ export class CommentsController {
 
         return  res.sendStatus(HttpStatus.NoContent)
     }
-    async updateCommentController (req: RequestWithParamsAndBodyAndUserId<IdType, CreateCommentInputModel, IdType>, res: Response) {
+    updateCommentController = async (req: RequestWithParamsAndBodyAndUserId<IdType, CreateCommentInputModel, IdType>, res: Response)=> {
         const userId = req.user?.userId as string;
         const commentId = req.params.id
         const {content} = req.body
@@ -42,7 +42,7 @@ export class CommentsController {
         return res.sendStatus(HttpStatus.NoContent)
     }
 
-    async findCommentController (req: RequestWithParams<IdType>, res: Response<CommentOutputModel>) {
+    findCommentController = async (req: RequestWithParams<IdType>, res: Response<CommentOutputModel>) => {
         const userId = req.user?.userId as string;
         const commentId = req.params.id
         const foundComment = await this.commentsQueryRepository.findCommentAndMap(commentId, userId)
@@ -54,7 +54,7 @@ export class CommentsController {
         return res.status(HttpStatus.Success).send(foundComment)
     }
 
-    async updateCommentLikeController (req: RequestWithParamsAndBodyAndUserId<IdType, LikeInputModel, IdType>, res: Response) {
+    updateCommentLikeController = async (req: RequestWithParamsAndBodyAndUserId<IdType, LikeInputModel, IdType>, res: Response) => {
         const userId = req.user?.userId as string;
         const commentId = req.params.id
         const {likeStatus} = req.body

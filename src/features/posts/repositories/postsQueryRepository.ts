@@ -22,11 +22,11 @@ export class PostsQueryRepository {
     async findPostById(_id: string):Promise< WithId<Post> | null > {
         return this.postModel.findOne({ _id , deletedAt:null}).lean().catch(()=> null );
     }
-    async findPostAndMap(id: string) {
-        const post = await this.findPostById(id)
-        return post?this.mapPost(post):null
+    async findPostAndMap(postId: string, userId?:string) {
+        const post = await this.findPostById(postId)
+        return post?this.mapPost(post, userId):null
     }
-    async getPostsAndMap(query:SortQueryFilterType, blogId?:string, userId?:string):Promise<pagPostOutputModel> { // используем этот метод если проверили валидность и существование в бд значения blogid
+    async getPostsAndMap(query:SortQueryFilterType, userId?:string, blogId?:string):Promise<pagPostOutputModel> { // используем этот метод если проверили валидность и существование в бд значения blogid
         const filter = blogId?{blogId, deletedAt:null}:{deletedAt:null}
         //const search = query.searchNameTerm ? {title:{$regex:query.searchNameTerm,$options:'i'}}:{}
         try {
@@ -82,21 +82,26 @@ export class PostsQueryRepository {
     }
     async findPostThreeNewestLikes(postId:string) {
         const postLikes = await this.likesPostsRepository.findThreeNewestLikesByPostId(postId)
+
         if (!postLikes) return []
 
-        const mapPostLikes =  postLikes.map(el => this.mapPostLike(el))
-        return Promise.all(mapPostLikes)
+        const mapPostLikesPromises =  postLikes.map(el => this.mapPostLike(el))
+
+        const mapPostLikes = await Promise.all(mapPostLikesPromises)
+
+        return mapPostLikes
     }
     async mapPostLike(el: LikePost):Promise<LikeDetailOutputModel> {
         const userId = el.authorId
         const user = await this.userQueryRepository.findUserById(userId)
 
-        return {
+        const result = {
             addedAt: el.createdAt.toISOString(),
             userId,
             login: user?user.login:null
         }
 
+        return result
     }
 
 }

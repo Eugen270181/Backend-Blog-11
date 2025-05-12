@@ -1,13 +1,12 @@
 import mongoose from "mongoose";
 
-import {appConfig} from "../../settings/config";
 import {Blog, BlogModelType, blogSchema} from "../../../features/blogs/domain/blog.entity";
 import {Post, PostModelType, postSchema} from "../../../features/posts/domain/post.entity";
 import {
-    RequestsLog,
-    RequestsLogModelType,
-    requestsLogSchema
-} from "../../middleware/rateLimitLogger/requestsLog.entity";
+    RequestLog,
+    RequestLogModelType,
+    requestLogSchema
+} from "../../../features/requestLogs/domain/requestsLog.entity";
 import {Session, SessionModelType, sessionSchema} from "../../../features/security/domain/session.entity";
 import {User, UserModelType, userSchema} from "../../../features/users/domain/user.entity";
 import {Comment, CommentModelType, commentSchema} from "../../../features/comments/domain/comment.entity";
@@ -27,7 +26,7 @@ export class DB {
         try {
             await mongoose.connect(url);
             this.client = mongoose.connection; // Сохраняем ссылку на подключение
-            console.log("Connected successfully to mongo server");
+            //console.log("Connected successfully to mongo server");
         } catch (e: unknown) {
             console.error("Can't connect to mongo server", e);
             await this.stop();
@@ -36,7 +35,7 @@ export class DB {
     // Метод для отключения от базы данных
     async stop() {
         await mongoose.disconnect();
-        console.log("Connection successfully closed");
+        //console.log("Connection successfully closed");
     }
     // Метод для очистки базы данных
     async drop() {
@@ -45,7 +44,7 @@ export class DB {
             for (const collectionName of collections) {
                 await this.client.collections[collectionName].deleteMany({});
             }
-            console.log("All collections are cleared");
+            //console.log("All collections are cleared");
         } catch (e: unknown) {
             console.error('Error in drop db:', e);
             await this.stop();
@@ -58,7 +57,7 @@ export class DB {
             PostModel: mongoose.model<Post, PostModelType>(Post.name, postSchema),
             CommentModel: mongoose.model<Comment, CommentModelType>(Comment.name, commentSchema),
             UserModel: mongoose.model<User, UserModelType>(User.name, userSchema),
-            RequestsLogModel: mongoose.model<RequestsLog, RequestsLogModelType>(RequestsLog.name, requestsLogSchema),
+            RequestLogModel: mongoose.model<RequestLog, RequestLogModelType>(RequestLog.name, requestLogSchema),
             SessionModel: mongoose.model<Session, SessionModelType>(Session.name, sessionSchema),
             LikeCommentModel: mongoose.model<LikeComment, LikeCommentModelType>(LikeComment.name, likeCommentSchema),
             LikePostModel: mongoose.model<LikePost, LikePostModelType>(LikePost.name, likePostSchema),

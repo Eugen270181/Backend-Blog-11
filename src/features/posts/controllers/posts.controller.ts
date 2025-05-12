@@ -23,9 +23,7 @@ import {CommentsQueryRepository} from "../../comments/repositories/commentsQuery
 import {pagCommentOutputModel} from "../../comments/types/output/pagCommentOutput.model";
 import {ResultStatus} from "../../../common/types/enum/resultStatus";
 import {LikeInputModel} from "../../likes/types/input/likeInput.model";
-import {LikesCommentsServices} from "../../likes/services/likesCommentsServices";
 import {LikesPostsServices} from "../../likes/services/likesPostsServices";
-
 
 export class PostsController {
     constructor( private postsServices: PostsServices,
@@ -34,7 +32,7 @@ export class PostsController {
                  private commentsQueryRepository: CommentsQueryRepository,
                  private likesPostsServices: LikesPostsServices) {}
 
-    async createPostController (req: RequestWithBody<CreatePostInputModel>, res: Response<PostOutputModel>) {
+    createPostController = async (req: RequestWithBody<CreatePostInputModel>, res: Response<PostOutputModel>) => {
         const newPostId = await this.postsServices.createPost(req.body)
         if (!newPostId) return res.sendStatus(HttpStatus.BadRequest)
 
@@ -43,30 +41,35 @@ export class PostsController {
 
         return res.status(HttpStatus.Created).send(newPost)
     }
-    async findPostController (req: RequestWithParams<IdType>, res: Response<PostOutputModel>) {
-        const foundPost = await this.postsQueryRepository.findPostAndMap(req.params.id)
+    findPostController = async (req: RequestWithParams<IdType>, res: Response<PostOutputModel>) => {
+        const userId = req.user?.userId as string;
+        const postId = req.params.id
+
+        const foundPost = await this.postsQueryRepository.findPostAndMap(postId, userId)
         if (!foundPost) return res.sendStatus(HttpStatus.NotFound)
         return res.status(HttpStatus.Success).send(foundPost)
     }
-    async getPostsController (req: RequestWithQuery<SortQueryFieldsType>, res: Response<Pagination<PostOutputModel[]>>) {
+    getPostsController = async (req: RequestWithQuery<SortQueryFieldsType>, res: Response<Pagination<PostOutputModel[]>>) => {
+        const userId = req.user?.userId as string;
         const sanitizedSortQuery:SortQueryFilterType = querySortSanitizer(req.query)
-        const foundPosts = await this.postsQueryRepository.getPostsAndMap(sanitizedSortQuery)
+
+        const foundPosts = await this.postsQueryRepository.getPostsAndMap(sanitizedSortQuery, userId)
         return res.status(HttpStatus.Success).send(foundPosts)
     }
-    async updatePostController (req: RequestWithParamsAndBody<IdType, UpdatePostInputModel>, res: Response) {
+    updatePostController = async (req: RequestWithParamsAndBody<IdType, UpdatePostInputModel>, res: Response) => {
         const postId = req.params.id
         const updateResult = await this.postsServices.updatePost(req.body,postId)
         if(!updateResult) return res.sendStatus(HttpStatus.NotFound)
         return res.sendStatus(HttpStatus.NoContent)
     }
-    async delPostController (req: RequestWithParams<IdType>, res: Response) {
+    delPostController = async (req: RequestWithParams<IdType>, res: Response) => {
         const postId = req.params.id;
         const deleteResult = await this.postsServices.deletePost(postId)
         if(!deleteResult) return res.sendStatus(HttpStatus.NotFound)
         return res.sendStatus(HttpStatus.NoContent)
     }
     //методы создания и нахождения комментария(ев), не существующего(связанного) без(с) поста(ом) и пользователя
-    async createPostCommentController (req: RequestWithParamsAndBodyAndUserId<IdType, CreateCommentInputModel, IdType>, res: Response<CommentOutputModel>) {
+    createPostCommentController = async (req: RequestWithParamsAndBodyAndUserId<IdType, CreateCommentInputModel, IdType>, res: Response<CommentOutputModel>) =>{
         const userId = req.user?.userId as string;
         const postId = req.params.id
         const {content} = req.body
@@ -83,7 +86,7 @@ export class PostsController {
         return res.status(HttpStatus.Created).send(newComment)
     }
 
-    async getPostCommentsController (req:RequestWithParamsAndQuery<IdType, SortQueryFieldsType>, res:Response<pagCommentOutputModel>) {
+    getPostCommentsController = async (req:RequestWithParamsAndQuery<IdType, SortQueryFieldsType>, res:Response<pagCommentOutputModel>) => {
         const userId = req.user?.userId as string;
         const postId = req.params.id
         const foundPost = await this.postsQueryRepository.findPostById(postId)
@@ -95,7 +98,7 @@ export class PostsController {
         return res.status(HttpStatus.Success).send(foundComments)
     }
     //метод обновления лайка связанного с постом и пользователем
-    async updatePostLikeController (req: RequestWithParamsAndBodyAndUserId<IdType, LikeInputModel, IdType>, res: Response) {
+    updatePostLikeController = async (req: RequestWithParamsAndBodyAndUserId<IdType, LikeInputModel, IdType>, res: Response) => {
         const userId = req.user?.userId as string;
         const postId = req.params.id
         const {likeStatus} = req.body
@@ -110,4 +113,3 @@ export class PostsController {
     }
 
 }
-

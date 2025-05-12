@@ -1,7 +1,6 @@
-import {LikeCommentDocument, LikeCommentModelType} from "../domain/likeComment.entity";
-
 import {DB} from "../../../common/module/db/DB";
 import {LikePost, LikePostDocument, LikePostModelType} from "../domain/likePost.entity";
+import {LikeStatus} from "../../../common/types/enum/likeStatus";
 
 
 export class LikesPostsRepository {
@@ -31,9 +30,10 @@ export class LikesPostsRepository {
     async findThreeNewestLikesByPostId(postId:string):Promise< LikePost[] | null > {
 
         return this.likePostModel
-                .find( {postId, deletedAt:null} )
+                .find( {postId, status:LikeStatus.Like, deletedAt:null} )
                 .sort({ createdAt: -1 })
                 .limit(3)
                 .lean()
     }
+
 }

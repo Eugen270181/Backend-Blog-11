@@ -5,7 +5,7 @@ import {UsersRepository} from "../../users/repositories/usersRepository";
 import {ResultStatus} from "../../../common/types/enum/resultStatus";
 import {Comment, CommentDocument, ICommentDto} from "../domain/comment.entity";
 import {PostsRepository} from "../../posts/repositories/postsRepository";
-import {ResultClass} from "../../../common/classes/result.class";
+import {Result} from "../../../common/classes/result";
 
 
 
@@ -14,7 +14,7 @@ export class CommentsServices {
                 private postsRepository: PostsRepository,
                 private usersRepository: UsersRepository) {}
     async createComment(commentInput: CreateCommentInputModel, postId:string, userId:string) {
-        const result = new ResultClass<string>()
+        const result = new Result<string>()
         const {content} = commentInput
 
         const foundUserDocument= await this.usersRepository.findUserById(userId)

@@ -1,7 +1,8 @@
 const request = require("supertest");
 //import request from 'supertest'
-import {ADMIN_LOGIN, ADMIN_PASS} from "../../../../src/common/middleware/adminMiddleware";
-import {BlogDto, testingDtosCreator, UserDto} from "../../testingDtosCreator";
+
+import {ADMIN_LOGIN, ADMIN_PASS} from "../../../../src/common/middleware/guardMiddlewares";
+import {BlogDto, testingDtosCreator} from "../../testingDtosCreator";
 import {routersPaths} from "../../../../src/common/settings/paths";
 import {BlogOutputModel} from "../../../../src/features/blogs/types/output/blogOutput.model";
 import {Pagination} from "../../../../src/common/types/pagination.type";

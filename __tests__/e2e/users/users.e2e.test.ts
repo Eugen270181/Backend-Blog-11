@@ -1,19 +1,17 @@
 const request = require("supertest")
 //import request from "supertest";
+import {MongoMemoryServer} from "mongodb-memory-server";
+
 import {OutputErrorsType} from "../../../src/common/types/outputErrors.type";
 import {initApp} from "../../../src/initApp";
-import {MongoMemoryServer} from "mongodb-memory-server";
 import {createUserBySa, getUsersQty} from "./utils/createGetUsers";
-import {createString, testingDtosCreator, UserDto} from "../testingDtosCreator";
+import {testingDtosCreator, UserDto} from "../testingDtosCreator";
 import {db} from "../../../src/ioc";
+import {ADMIN_LOGIN, ADMIN_PASS} from "../../../src/common/middleware/guardMiddlewares";
 import {appConfig} from "../../../src/common/settings/config";
 import {routersPaths} from "../../../src/common/settings/paths";
-import {ADMIN_LOGIN, ADMIN_PASS} from "../../../src/common/middleware/adminMiddleware";
 import {UserOutputModel} from "../../../src/features/users/types/output/userOutput.type";
 import {validateErrorsObject} from "../validateErrorsObject";
-
-
-
 
 
 describe(`<<USERS>> ENDPOINTS TESTING!!!`, () => {

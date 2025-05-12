@@ -12,3 +12,4 @@ export type ExtendedLikesInfoOutputModel = {
     myStatus: LikeStatus,
     newestLikes: LikeDetailOutputModel[]
 }
+

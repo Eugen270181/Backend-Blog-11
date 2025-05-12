@@ -29,14 +29,14 @@ export class BlogsController {
                  private postsServices: PostsServices,
                  private postsQueryRepository: PostsQueryRepository) {}
     //методы - контролеры
-    async createBlogController (req: RequestWithBody<CreateBlogInputModel>, res: Response<BlogOutputModel>) {
+    createBlogController = async (req: RequestWithBody<CreateBlogInputModel>, res: Response<BlogOutputModel>)=> {
         const newBlogId = await this.blogsServices.createBlog(req.body)
         const newBlog = await this.blogsQueryRepository.findBlogAndMap(newBlogId)
 
         if (!newBlog) return res.sendStatus(HttpStatus.InternalServerError)
         return res.status(HttpStatus.Created).send(newBlog)
     }
-    async getBlogsController (req:RequestWithQuery<BlogsQueryFieldsType>, res:Response<Pagination<BlogOutputModel[]>>) {
+    getBlogsController = async (req:RequestWithQuery<BlogsQueryFieldsType>, res:Response<Pagination<BlogOutputModel[]>>)=> {
         const sanitizedSortQuery = querySortSanitizer(req.query)
         const searchNameTerm = req.query.searchNameTerm;
         const blogsQueryFilter:BlogsQueryFilterType = {searchNameTerm,...sanitizedSortQuery}
@@ -44,24 +44,24 @@ export class BlogsController {
         const foundBlogs = await this.blogsQueryRepository.getBlogsAndMap(blogsQueryFilter)
         return res.status(HttpStatus.Success).send(foundBlogs)
     }
-    async findBlogController (req: RequestWithParams<IdType>, res: Response<BlogOutputModel | {}>) {
+    findBlogController = async (req: RequestWithParams<IdType>, res: Response<BlogOutputModel | {}>)=> {
         const blogId = req.params.id
         const foundBlog = await this.blogsQueryRepository.findBlogAndMap(blogId)
         if (!foundBlog) return res.sendStatus(HttpStatus.NotFound)
         return res.status(HttpStatus.Success).send(foundBlog)
     }
-    async updateBlogController (req: RequestWithParamsAndBody<IdType, UpdateBlogInputModel>, res: Response) {
+    updateBlogController = async (req: RequestWithParamsAndBody<IdType, UpdateBlogInputModel>, res: Response)=> {
         const updateResult = await this.blogsServices.updateBlog(req.body,req.params.id)
         if (!updateResult) return res.sendStatus(HttpStatus.NotFound)
         return res.sendStatus(HttpStatus.NoContent)
     }
-    async delBlogController (req: RequestWithParams<IdType>, res: Response) {
+    delBlogController = async (req: RequestWithParams<IdType>, res: Response) => {
         const blogId = req.params.id;
         const deleteResult = await this.blogsServices.deleteBlog(blogId)
         if (!deleteResult) return res.sendStatus(HttpStatus.NotFound)
         return  res.sendStatus(HttpStatus.NoContent)
     }
-    async createBlogPostController (req: RequestWithParamsAndBody<IdType, CreateBlogPostInputModel>, res: Response<PostOutputModel>) {
+    createBlogPostController = async (req: RequestWithParamsAndBody<IdType, CreateBlogPostInputModel>, res: Response<PostOutputModel>)=> {
         const blogId = req.params.id
         const newPostId = await this.postsServices.createPost({...req.body,blogId})
         if (!newPostId) return res.sendStatus(HttpStatus.NotFound)
@@ -71,14 +71,16 @@ export class BlogsController {
 
         return res.status(HttpStatus.Created).send(newPost)
     }
-    async findBlogPostsController (req: RequestWithParamsAndQuery<IdType,SortQueryFieldsType>, res: Response<pagPostOutputModel>) {
+    findBlogPostsController = async (req: RequestWithParamsAndQuery<IdType,SortQueryFieldsType>, res: Response<pagPostOutputModel>)=> {
         const blogId = req.params.id
+        const userId = req.user?.userId as string;
+
         const foundBlog = await this.blogsQueryRepository.findBlogById(blogId)
         if (!foundBlog) return res.sendStatus(HttpStatus.NotFound)
 
         const sanitizedSortQuery = querySortSanitizer(req.query)
 
-        const getPosts = await this.postsQueryRepository.getPostsAndMap(sanitizedSortQuery,blogId)
+        const getPosts = await this.postsQueryRepository.getPostsAndMap(sanitizedSortQuery, userId, blogId)
         return res.status(HttpStatus.Success).send(getPosts)
     }
 }

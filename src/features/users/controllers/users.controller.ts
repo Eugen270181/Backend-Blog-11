@@ -18,7 +18,7 @@ import {UsersQueryFilterType} from "../types/usersQueryFilter.type";
 export class UsersController {
     constructor(private usersServices : UsersServices,
                 private usersQueryRepository : UsersQueryRepository) {}
-    async createUserController (req: RequestWithBody<CreateUserInputModel>, res: Response<UserOutputModel|OutputErrorsType>){
+    createUserController = async (req: RequestWithBody<CreateUserInputModel>, res: Response<UserOutputModel|OutputErrorsType>)=> {
         const newUserResult = await this.usersServices.createUser(req.body)
 
         if (newUserResult.status===ResultStatus.BadRequest) {
@@ -31,13 +31,13 @@ export class UsersController {
 
         return res.status(HttpStatus.Created).send(newUser)
     }
-    async delUserController (req: RequestWithParams<IdType>, res: Response){
+    delUserController = async (req: RequestWithParams<IdType>, res: Response)=> {
         const userId = req.params.id
         const deleteResult = await this.usersServices.deleteUser(userId)
         if (!deleteResult) return res.sendStatus(HttpStatus.NotFound)
         return  res.sendStatus(HttpStatus.NoContent)
     }
-    async getUsersController (req : RequestWithQuery<UsersQueryFieldsType>, res : Response<Pagination<UserOutputModel[]>>) {
+    getUsersController = async (req : RequestWithQuery<UsersQueryFieldsType>, res : Response<Pagination<UserOutputModel[]>>) => {
         const sanitizedSortQuery:SortQueryFilterType = querySortSanitizer(req.query)
         const searchLoginTerm = req.query.searchLoginTerm;
         const searchEmailTerm = req.query.searchEmailTerm;

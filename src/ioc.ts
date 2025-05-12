@@ -25,6 +25,19 @@ import {LikesCommentsRepository} from "./features/likes/repository/likesComments
 import {DB} from "./common/module/db/DB";
 import {LikesPostsRepository} from "./features/likes/repository/likesPostsRepository";
 import {LikesPostsServices} from "./features/likes/services/likesPostsServices";
+import {RequestsLogsRepository} from "./features/requestLogs/repositories/requestsLogsRepository";
+import {RequestsLogsServices} from "./features/requestLogs/services/requestsLogsServices";
+import {RequestsLogsQueryRepository} from "./features/requestLogs/repositories/requestsLogsQueryRepository";
+import {PostValidation} from "./features/posts/postValidation";
+import {BlogValidation} from "./features/blogs/blogValidation";
+import {LikeValidation} from "./features/likes/likeValidation";
+import {AuthValidation} from "./features/auth/authValidation";
+import {CommentValidation} from "./features/comments/commentValidation";
+import {ShieldMiddlewares} from "./common/middleware/guardMiddlewares";
+import {QueryValidation} from "./common/middleware/queryValidation";
+import {ValidationMiddlewares} from "./common/middleware/validationMiddlewares";
+
+
 const objects: any[] = []
 //////////////////DB//////////////////////////////////////////////////////
 export const db = new DB(); objects.push(db);
@@ -41,7 +54,9 @@ export const commentsRepository = new CommentsRepository(db); objects.push(comme
 export const commentsQueryRepository = new CommentsQueryRepository(db, likesCommentsRepository); objects.push(commentsQueryRepository);
 export const securityRepository = new SecurityRepository(db) ;objects.push(securityRepository);
 export const securityQueryRepository = new SecurityQueryRepository(db) ;objects.push(securityQueryRepository);
-//////////////////BLL - Services//////////////////////////////////////////
+export const requestsLogsRepository = new RequestsLogsRepository(db) ;objects.push(requestsLogsRepository);
+export const requestsLogsQueryRepository = new RequestsLogsQueryRepository(db) ;objects.push(requestsLogsQueryRepository);
+//////////////////BLL - Services//////////////////////////////////////////////////////////////////////////////////////////////////////
 export const usersServices = new UsersServices(usersRepository) ;objects.push(usersServices);
 export const blogsServices = new BlogsServices(blogsRepository) ;objects.push(blogsServices);
 export const postsServices = new PostsServices(blogsRepository, postsRepository) ;objects.push(postsServices);
@@ -50,6 +65,7 @@ export const commentsServices = new CommentsServices(commentsRepository, postsRe
 export const likesCommentsServices = new LikesCommentsServices(likesCommentsRepository, usersRepository, commentsRepository) ;objects.push(likesCommentsServices);
 export const securityServices = new SecurityServices(securityRepository) ;objects.push(securityServices);
 export const authServices = new AuthServices(securityServices, securityRepository, usersServices, usersRepository) ;objects.push(authServices);
+export const requestsLogsServices = new RequestsLogsServices(requestsLogsRepository);objects.push(requestsLogsServices);
 ///////////////////Presentation Layer - Controllers/////////////////////////
 export const blogsControllerInstance = new BlogsController(
     blogsServices,
@@ -84,12 +100,35 @@ export const securityControllerInstance = new SecurityController(
     securityQueryRepository
 )
 objects.push(securityControllerInstance)
-export const authController = new AuthController(
+export const authControllerInstance = new AuthController(
     authServices,
     usersQueryRepository
 )
-objects.push(authController)
+objects.push(authControllerInstance)
+//////////////////middlewares////////////////////////////////////////////////////////
+export const shieldMiddlewaresInstance = new ShieldMiddlewares(
+    requestsLogsServices,
+    requestsLogsQueryRepository,
+    authServices
+)
+objects.push(shieldMiddlewaresInstance)
 
+export const authValidatorsInstance = new AuthValidation(usersRepository);objects.push(authValidatorsInstance);
+export const blogValidatorsInstance = new BlogValidation();objects.push(blogValidatorsInstance)
+export const postValidatorsInstance = new PostValidation(blogsRepository);objects.push(postValidatorsInstance)
+export const commentValidatorsInstance = new CommentValidation();objects.push(commentValidatorsInstance)
+export const likeValidatorsInstance = new LikeValidation();objects.push(likeValidatorsInstance)
+export const queryValidatorsInstance= new QueryValidation();objects.push()
+
+export const validationMiddlewaresInstance = new ValidationMiddlewares(
+    authValidatorsInstance,
+    blogValidatorsInstance,
+    postValidatorsInstance,
+    commentValidatorsInstance,
+    likeValidatorsInstance,
+    queryValidatorsInstance
+)
+objects.push(validationMiddlewaresInstance)
 //////////////////////////IoC Container - метод получить заранее созданый объект из массива объектов////////////////////////
 export const ioc = {
     getInstance<T>(ClassType: any) {

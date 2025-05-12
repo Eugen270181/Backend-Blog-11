@@ -1,11 +1,9 @@
-import {add} from "date-fns/add";
-import {randomUUID} from "crypto";
 import {HydratedDocument, Model, Schema} from "mongoose";
 
 import {db} from "../../../ioc";
-import {RandomCodeServices} from "../../../common/adapters/randomCodeServices";
-import {durationMapper} from "../../../common/module/durationMapper";
+import {codeServices} from "../../../common/adapters/codeServices";
 import {appConfig} from "../../../common/settings/config";
+import {dateServices} from "../../../common/adapters/dateServices";
 
 
 export interface IUserDto {
@@ -49,8 +47,11 @@ export class User {
 
     static createUserByReg({ login, email, hash }:IUserDto) {
         const userDocument = this.createUserBySa({ login, email, hash })
+        const date = dateServices.genAddDate(new Date(), appConfig.EMAIL_TIME)
+        const code = codeServices.genRandomCode()
+
+        userDocument.setRegConfirmationCode( code, date)
         userDocument.isConfirmed = false
-        userDocument.setRegConfirmationCode(RandomCodeServices.genRandomCode(), add(new Date(), durationMapper(appConfig.EMAIL_TIME)))
 
         return userDocument
     }
@@ -66,7 +67,7 @@ export class User {
             expirationDate: date
         }
     }
-    setPassConfirmationCode(code, date) {
+    setPassConfirmationCode(code: string, date: Date) {
         this.passConfirmation = {
             confirmationCode: code,
             expirationDate: date

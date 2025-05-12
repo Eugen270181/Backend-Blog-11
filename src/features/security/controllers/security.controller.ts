@@ -3,7 +3,6 @@ import {IdType} from "../../../common/types/id.type";
 import {Request, Response} from "express";
 import {HttpStatus} from "../../../common/types/enum/httpStatus";
 import {AuthServices} from "../../auth/services/authServices";
-import {ResultStatus} from "../../../common/types/enum/resultStatus";
 import {SecurityRepository} from "../repositories/securityRepository";
 import {SecurityServices} from "../services/securityServices";
 import {SecurityOutputModel} from "../types/output/securityOutput.model";
@@ -16,46 +15,31 @@ export class SecurityController {
                 private securityQueryRepository : SecurityQueryRepository
     ) {}
 
-    async delSecurityDeviceController (req: RequestWithParams<IdType>, res: Response) {
-        const sid = req.params.id
-        const refreshToken = req.cookies.refreshToken
+    delSecurityDeviceController = async (req: RequestWithParams<IdType>, res: Response) => {
+        const delDeviceId = req.params.id
+        const userId = req.user?.userId as string
 
-        if (!refreshToken) return res.sendStatus(HttpStatus.Unauthorized) //нет RT
-        const checkRT = await this.authServices.checkRefreshToken(refreshToken)
-        if (checkRT.status !== ResultStatus.Success) return res.sendStatus(HttpStatus.Unauthorized) // RT не валиден
-        const userId = checkRT.data!.userId
+        const foundSession = await this.securityRepository.findSessionById(delDeviceId)
+        if (!foundSession) return res.sendStatus(HttpStatus.NotFound) //не найдена сессия
 
-        const foundSession = await this.securityRepository.findSessionById(sid)
-        if (!foundSession) return res.sendStatus(HttpStatus.NotFound) //не найдена сессия - sid = deviceId
+        if (foundSession.userId !== userId) return res.sendStatus(HttpStatus.Forbidden) //userId из входного RT not owner foundSession
 
-        if (foundSession.userId !== userId) return res.sendStatus(HttpStatus.Forbidden) //userId из входного RT - !owner foundSession
-
-        await this.securityServices.deleteSession(foundSession.deviceId)
+        await this.securityServices.deleteSession(delDeviceId)
 
         return  res.sendStatus(HttpStatus.NoContent)
     }
-    async delSecurityDevicesController (req: Request, res: Response) {
-        const refreshToken = req.cookies.refreshToken
+    delSecurityDevicesController = async (req: Request, res: Response) => {
+        const userId = req.user?.userId as string;
+        const deviceId = req.device?.deviceId as string;
 
-        if (!refreshToken) return res.sendStatus(HttpStatus.Unauthorized) //нет RT
-        const checkRT = await this.authServices.checkRefreshToken(refreshToken)
-
-        if (checkRT.status !== ResultStatus.Success) return res.sendStatus(HttpStatus.Unauthorized) // RT не валиден
-        const userId = checkRT.data!.userId
-        const currentSessionId = checkRT.data!.deviceId
-
-        await this.securityServices.deleteOtherSessions(userId,currentSessionId)
+        await this.securityServices.deleteOtherSessions(userId, deviceId)
 
         return  res.sendStatus(HttpStatus.NoContent)
     }
-    async getSecurityDevicesController (req: Request, res: Response<SecurityOutputModel[]>) {
-        const refreshToken = req.cookies.refreshToken
-        if (!refreshToken) return res.sendStatus(HttpStatus.Unauthorized)
+    getSecurityDevicesController = async (req: Request, res: Response<SecurityOutputModel[]>) => {
+        const userId = req.user?.userId as string;
 
-        const checkRT = await this.authServices.checkRefreshToken(refreshToken)
-        if (checkRT.status !== ResultStatus.Success) return res.sendStatus(HttpStatus.Unauthorized)
-
-        const sessions = await this.securityQueryRepository.getActiveSessionsAndMap(checkRT.data!.deviceId)
+        const sessions = await this.securityQueryRepository.getActiveSessionsAndMap(userId)
 
         return res.status(HttpStatus.Success).send(sessions)
 

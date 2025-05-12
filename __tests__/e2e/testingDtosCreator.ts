@@ -39,10 +39,14 @@ export type ConfirmRegDto = {       //Registration Confirmation
 export type ResendRegCodeDto = {       //Resend Registration Code with this email
     email: string,
 }
-export type PassRecoveryDto = ResendRegCodeDto //Password Recovery wich email send recCode
+export type RecoveryPassDto = ResendRegCodeDto //Password Recovery wich email send recCode
 export type ConfirmPassDto = {       //login
     newPassword: string,
     recoveryCode: string,
+}
+export type TokensDto = {
+    accessToken: string,
+    refreshToken: string
 }
 /////////////adition function////////////////
 export const createString = (length: number) => {
@@ -52,6 +56,7 @@ export const createString = (length: number) => {
     }
     return s
 }
+export const passTestsDefault = '123456789';
 /////////////////////////////////////////////
 /////////////////////////////////////////////
 export const testingDtosCreator = {
@@ -61,7 +66,7 @@ export const testingDtosCreator = {
         return {
             login: login ?? 'test_login',
             email: email ?? 'test_@gmail.com',
-            password: password ?? '123456789',
+            password: password ?? passTestsDefault,
         }
     },
     createUserDtos(count: number): UserDto[] {
@@ -71,7 +76,7 @@ export const testingDtosCreator = {
             users.push({
                 login: `test${i}login`,
                 email: `test${i}@gmail.com`,
-                password: '123456789'
+                password: passTestsDefault
             })
         }
         return users;
@@ -142,5 +147,21 @@ export const testingDtosCreator = {
         }
         return posts;
     },
+    createCommentDto({ content }: { content?:string }): CommentDto {
+        return {
+            content: content ?? 'commentTest!_content'
+        }
+    },
+    createCommentDtos(count: number): CommentDto[] {
+        const comments: CommentDto[] = [];
+
+        for (let i = 0; i < count; i++) {
+            comments.push({
+                content: `commentTest${i}_content`
+            })
+        }
+        return comments;
+    },
+
 
 }

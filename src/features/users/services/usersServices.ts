@@ -1,7 +1,7 @@
 import {UsersRepository} from "../repositories/usersRepository";
 import {CreateUserInputModel} from "../types/input/createUserInput.type";
 import {hashServices} from "../../../common/adapters/hashServices";
-import {ResultClass} from '../../../common/classes/result.class';
+import {Result} from '../../../common/classes/result';
 import {ResultStatus} from "../../../common/types/enum/resultStatus";
 import {IUserDto, User, UserDocument} from "../domain/user.entity";
 
@@ -9,7 +9,7 @@ import {IUserDto, User, UserDocument} from "../domain/user.entity";
 export class UsersServices {
     constructor(private usersRepository: UsersRepository) {}
     async createUser(user: CreateUserInputModel) {
-        const result = new ResultClass<string>()
+        const result = new Result<string>()
         const {login, password, email} = user
 
         if (await this.usersRepository.findUserByLogin(login)) {
@@ -57,16 +57,7 @@ export class UsersServices {
 
         return true
     }
-    async setRegConfirmationCode(id:string, code:string, date:Date) {
-        const foundUserDocument: UserDocument | null = await this.usersRepository.findUserById(id);
-        if (!foundUserDocument) return false
 
-        foundUserDocument.setRegConfirmationCode(code, date)
-
-        await this.usersRepository.save(foundUserDocument)
-
-        return true
-    }
     async setPassConfirmationCode(id:string, code:string, date:Date) {
         const foundUserDocument: UserDocument | null = await this.usersRepository.findUserById(id);
         if (!foundUserDocument) return false

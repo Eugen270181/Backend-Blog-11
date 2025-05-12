@@ -18,13 +18,16 @@ export class AuthController {
     constructor(private authServices : AuthServices,
                 private usersQueryRepository : UsersQueryRepository,
     ) {}
-    async getMeController (req: RequestWithUserId<IdType>, res: Response<MeOutputModel|{}>) {
+    getMeController = async (req: RequestWithUserId<IdType>, res: Response<MeOutputModel|{}>)=> {
         const userId = req.user?.userId as string;
         const meViewObject = await this.usersQueryRepository.getMapMe(userId)
         return res.status(HttpStatus.Success).send(meViewObject)
     }
-    async loginAuthController (req: RequestWithBody<LoginInputModel>, res: Response<LoginSuccessOutputModel>) {
-        const result = await this.authServices.loginUser(req.body,req.ip??'unknown',req.headers["user-agent"]??'unknown')
+    loginAuthController = async (req: RequestWithBody<LoginInputModel>, res: Response<LoginSuccessOutputModel>)=> {
+        const devIp = req.ip??'unknown'
+        const devTitle = req.headers["user-agent"]??'unknown';
+
+        const result = await this.authServices.loginUser(req.body, devIp, devTitle)
 
         if (result.status === ResultStatus.Unauthorized) return res.sendStatus(HttpStatus.Unauthorized)
 
@@ -37,18 +40,17 @@ export class AuthController {
 
         return res.status(HttpStatus.Success).send({accessToken:result.data!.accessToken})
     }
-    async logoutAuthController (req: Request, res: Response) {
-        const refreshToken = req.cookies.refreshToken
-        if (!refreshToken) return res.sendStatus(HttpStatus.Unauthorized)
+    logoutAuthController = async (req: Request, res: Response) => {
+        const deviceId = req.device?.deviceId as string
 
-        const isLogout = await this.authServices.logoutUser(refreshToken)
+        const result = await this.authServices.logoutUser(deviceId)
 
-        if (!isLogout) return res.sendStatus(HttpStatus.Unauthorized)
+        if (result.status === ResultStatus.Unauthorized) return res.sendStatus(HttpStatus.Unauthorized)
+        if (result.status === ResultStatus.CancelledAction) return res.sendStatus(HttpStatus.InternalServerError)
 
         return res.sendStatus(HttpStatus.NoContent)
-
     }
-    async newPasswordAuthController (req: RequestWithBody<NewPasswordRecoveryInputModel>, res: Response) {
+    newPasswordAuthController = async (req: RequestWithBody<NewPasswordRecoveryInputModel>, res: Response) => {
         const { newPassword, recoveryCode} = req.body;
         const result = await this.authServices.confirmPassCodeEmail(newPassword, recoveryCode)
 
@@ -56,7 +58,7 @@ export class AuthController {
 
         return res.sendStatus(HttpStatus.NoContent);
     }
-    async passwordRecoveryAuthController (req: RequestWithBody<PasswordRecoveryInputModel>, res: Response) {
+    passwordRecoveryAuthController = async (req: RequestWithBody<PasswordRecoveryInputModel>, res: Response) => {
         const {email} = req.body
         const result = await this.authServices.resendPassCodeEmail(email)
 
@@ -64,11 +66,11 @@ export class AuthController {
 
         return res.sendStatus(HttpStatus.NoContent)
     }
-    async refreshTokenAuthController (req: Request, res: Response<LoginSuccessOutputModel>) {
-        const refreshToken = req.cookies.refreshToken
-        if (!refreshToken) return res.sendStatus(HttpStatus.Unauthorized)
+    refreshTokenAuthController = async (req: Request, res: Response<LoginSuccessOutputModel>) => {
+        const userId = req.user?.userId as string
+        const deviceId = req.device?.deviceId as string
 
-        const result = await this.authServices.refreshTokens(refreshToken)
+        const result = await this.authServices.refreshTokens(userId,deviceId)
 
         if (result.status === ResultStatus.Success) {
             res.cookie("refreshToken",result.data!.refreshToken,{
@@ -81,15 +83,16 @@ export class AuthController {
 
         return res.sendStatus(HttpStatus.Unauthorized)
     }
-    async regAuthController (req: RequestWithBody<CreateUserInputModel>, res: Response) {
+    regAuthController = async (req: RequestWithBody<CreateUserInputModel>, res: Response) => {
+        const {login, password, email} = req.body
 
-        const result = await this.authServices.registerUser( req.body )
+        const result = await this.authServices.registerUser( {login, password, email} )
 
         if (result.status === ResultStatus.BadRequest) return res.status(HttpStatus.BadRequest).send(result.errors)
 
         return res.sendStatus(HttpStatus.NoContent)
     }
-    async regConfirmAuthController (req: RequestWithBody<RegistrationConfirmationInputModel>, res: Response) {
+    regConfirmAuthController = async (req: RequestWithBody<RegistrationConfirmationInputModel>, res: Response) => {
         const {code} = req.body;
         const result = await this.authServices.confirmRegCodeEmail(code)
 
@@ -97,7 +100,7 @@ export class AuthController {
 
         return res.sendStatus(HttpStatus.NoContent);
     }
-    async regEmailResendingAuthController (req: RequestWithBody<RegistrationEmailResendingInputModel>, res: Response) {
+    regEmailResendingAuthController = async (req: RequestWithBody<RegistrationEmailResendingInputModel>, res: Response) => {
         const {email} = req.body
         const result = await this.authServices.resendRegCodeEmail(email)
 

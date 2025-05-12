@@ -1,7 +1,6 @@
 import {WithId} from "mongodb"
 import {SecurityOutputModel} from "../types/output/securityOutput.model";
 import {Session, SessionModelType} from "../domain/session.entity";
-import {db} from "../../../ioc";
 import {DB} from "../../../common/module/db/DB";
 
 export class SecurityQueryRepository {
@@ -12,6 +11,7 @@ export class SecurityQueryRepository {
     }
     async getActiveSessionsAndMap(userId?:string):Promise<SecurityOutputModel[]> { // используем этот метод если проверили валидность и существование в бд значения blogid
         const dateNow = new Date();
+
         const filter = { "expDate":{ $gt:dateNow }, ...(userId && { userId }) }
 
         const sessions = await this.sessionModel.find(filter).lean()

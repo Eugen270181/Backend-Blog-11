@@ -1,21 +1,45 @@
 import {Router} from 'express'
-import {blogValidators} from './middlewares/blogValidators'
-import {adminMiddleware} from '../../common/middleware/adminMiddleware'
-import {querySortSanitizers} from "../../common/middleware/querySortSanitizerMiddleware";
-import {blogPostValidators} from "../../common/middleware/postValidatonMiddleware";
 import {ioc} from "../../ioc";
 import {BlogsController} from "./controllers/blogs.controller";
+import {ShieldMiddlewares} from "../../common/middleware/guardMiddlewares";
+import {ValidationMiddlewares} from "../../common/middleware/validationMiddlewares";
+
+
 
 export const blogsRouter = Router()
 
-const blogsControllerInstance = ioc.getInstance<BlogsController>(BlogsController)
+const guardInstance = ioc.getInstance<ShieldMiddlewares>(ShieldMiddlewares)
+const validationInstance = ioc.getInstance<ValidationMiddlewares>(ValidationMiddlewares)
+const blogsInstance = ioc.getInstance<BlogsController>(BlogsController)
 
-blogsRouter.get('/', ...querySortSanitizers, blogsControllerInstance.getBlogsController.bind(blogsControllerInstance))
-blogsRouter.get('/:id', blogsControllerInstance.findBlogController.bind(blogsControllerInstance))
-blogsRouter.get('/:id/posts', ...querySortSanitizers, blogsControllerInstance.findBlogPostsController.bind(blogsControllerInstance))//new - task-04
-blogsRouter.post('/:id/posts', adminMiddleware,...blogPostValidators, blogsControllerInstance.createBlogPostController.bind(blogsControllerInstance))//new - task-04
-blogsRouter.post('/', adminMiddleware,...blogValidators, blogsControllerInstance.createBlogController.bind(blogsControllerInstance))
-blogsRouter.delete('/:id', adminMiddleware, blogsControllerInstance.delBlogController.bind(blogsControllerInstance))
-blogsRouter.put('/:id', adminMiddleware, ...blogValidators, blogsControllerInstance.updateBlogController.bind(blogsControllerInstance))
 
-// не забудьте добавить роут в апп
+blogsRouter.get('/',
+    validationInstance.querySortSanitizers,
+    blogsInstance.getBlogsController)
+
+blogsRouter.get('/:id',
+    blogsInstance.findBlogController)
+
+blogsRouter.get('/:id/posts',
+    guardInstance.accessToken,
+    validationInstance.querySortSanitizers,
+    blogsInstance.findBlogPostsController)
+
+blogsRouter.post('/:id/posts',
+    guardInstance.adminAccess,
+    validationInstance.blogPostValidators,
+    blogsInstance.createBlogPostController)
+
+blogsRouter.post('/',
+    guardInstance.adminAccess,
+    validationInstance.blogValidators,
+    blogsInstance.createBlogController)
+
+blogsRouter.delete('/:id',
+    guardInstance.adminAccess,
+    blogsInstance.delBlogController)
+
+blogsRouter.put('/:id',
+    guardInstance.adminAccess,
+    validationInstance.blogValidators,
+    blogsInstance.updateBlogController)

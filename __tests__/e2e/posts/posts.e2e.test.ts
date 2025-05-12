@@ -1,3 +1,5 @@
+import {ADMIN_LOGIN, ADMIN_PASS} from "../../../src/common/middleware/guardMiddlewares";
+
 const request = require("supertest");
 //import request from "supertest";
 import {initApp} from "../../../src/initApp";
@@ -17,10 +19,10 @@ import {
     getPostsQty,
     getBlogPostsQty
 } from "./util/createGetPosts";
-import {ADMIN_LOGIN, ADMIN_PASS} from "../../../src/common/middleware/adminMiddleware";
 import {OutputErrorsType} from "../../../src/common/types/outputErrors.type";
 import {validateErrorsObject} from "../validateErrorsObject";
 import {LikeStatus} from "../../../src/common/types/enum/likeStatus";
+
 
 describe('/posts', () => {
     const app=initApp()
@@ -115,7 +117,7 @@ describe('/posts', () => {
                     newestLikes: []
                 }
             })
-            console.log(newPost)
+            //console.log(newPost)
             //на всякий случай проверяем не произошла ли ошибка записи в БД:
             const postCounter = await getPostsQty(app)
             expect(postCounter).toEqual(1)
@@ -182,7 +184,7 @@ describe('/posts', () => {
                 ...blogPostDto,
                 blogId,
                 blogName: newBlog.name,
-                createdAt: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z?$/),
+                createdAt: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/),
                 extendedLikesInfo: {
                     likesCount: 0,
                     dislikesCount: 0,
@@ -190,7 +192,7 @@ describe('/posts', () => {
                     newestLikes: []
                 }
             });
-            console.log(newBlogPost)
+            //console.log(newBlogPost)
             //на всякий случай проверяем не произошла ли ошибка записи в БД:
             const postCounter = await getPostsQty(app)
             expect(postCounter).toEqual(2)
@@ -311,9 +313,9 @@ describe('/posts', () => {
             expect(oldBlogPostsQty).toBe(2)
             expect(newBlogPostsQty).toBe(0)
             //ну и проверим пагинацию постов первого старого блога по запросу
-            console.log(oldBlogId)
+            //console.log(oldBlogId)
             const foundPosts = await getBlogPosts(app, oldBlogId)
-            console.log(foundPosts)
+            //console.log(foundPosts)
             expect(foundPosts).toEqual({
                 pagesCount:	expect.any(Number),
                 page: expect.any(Number),

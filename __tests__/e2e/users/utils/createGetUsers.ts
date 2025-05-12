@@ -1,10 +1,12 @@
+import {ADMIN_LOGIN, ADMIN_PASS} from "../../../../src/common/middleware/guardMiddlewares";
+
 const request = require("supertest")
 //import request from "supertest";
 import {testingDtosCreator, UserDto} from "../../testingDtosCreator";
 
-import {ADMIN_LOGIN, ADMIN_PASS} from "../../../../src/common/middleware/adminMiddleware";
 import {routersPaths} from "../../../../src/common/settings/paths";
 import {UserOutputModel} from "../../../../src/features/users/types/output/userOutput.type";
+
 
 
 
