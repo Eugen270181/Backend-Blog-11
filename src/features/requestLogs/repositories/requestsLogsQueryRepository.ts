@@ -1,10 +1,12 @@
 import { IReqLogQuery, RequestLogModelType, SelReqLogFilter } from "../domain/requestsLog.entity";
 import {DB} from "../../../common/module/db/DB";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class RequestsLogsQueryRepository {
 
     private requestLogModel: RequestLogModelType
-    constructor(private db: DB) {
+    constructor(@inject(DB) private db: DB) {
         this.requestLogModel = db.getModels().RequestLogModel
     }
     async requestsCounter(reqLogQuery: IReqLogQuery):Promise<number> {

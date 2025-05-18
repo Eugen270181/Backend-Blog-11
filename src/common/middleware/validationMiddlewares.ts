@@ -7,16 +7,17 @@ import {LikeValidation} from "../../features/likes/likeValidation";
 import {CommentValidation} from "../../features/comments/commentValidation";
 import {AuthValidation} from "../../features/auth/authValidation";
 import {QueryValidation} from "./queryValidation";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class ValidationMiddlewares {
 
-    constructor(private authValidation: AuthValidation,
-                private  blogValidation: BlogValidation,
-                private postValidation: PostValidation,
-                private commentValidation: CommentValidation,
-                private likeValidation: LikeValidation,
-                private queryValidation: QueryValidation
+    constructor(@inject(AuthValidation) private authValidation: AuthValidation,
+                @inject(BlogValidation) private blogValidation: BlogValidation,
+                @inject(PostValidation) private postValidation: PostValidation,
+                @inject(CommentValidation) private commentValidation: CommentValidation,
+                @inject(LikeValidation) private likeValidation: LikeValidation,
+                @inject(QueryValidation) private queryValidation: QueryValidation
     ) {}
 
     get querySortSanitizers() {

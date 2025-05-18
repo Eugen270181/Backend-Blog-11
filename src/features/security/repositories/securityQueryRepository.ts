@@ -2,11 +2,13 @@ import {WithId} from "mongodb"
 import {SecurityOutputModel} from "../types/output/securityOutput.model";
 import {Session, SessionModelType} from "../domain/session.entity";
 import {DB} from "../../../common/module/db/DB";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class SecurityQueryRepository {
     private sessionModel:SessionModelType
 
-    constructor(private db: DB) {
+    constructor(@inject(DB) private db: DB) {
         this.sessionModel = db.getModels().SessionModel
     }
     async getActiveSessionsAndMap(userId?:string):Promise<SecurityOutputModel[]> { // используем этот метод если проверили валидность и существование в бд значения blogid

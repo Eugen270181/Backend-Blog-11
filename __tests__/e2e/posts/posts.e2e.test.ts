@@ -3,7 +3,6 @@ import {ADMIN_LOGIN, ADMIN_PASS} from "../../../src/common/middleware/guardMiddl
 const request = require("supertest");
 //import request from "supertest";
 import {initApp} from "../../../src/initApp";
-import {db} from "../../../src/ioc";
 import {BlogOutputModel} from "../../../src/features/blogs/types/output/blogOutput.model";
 import {PostOutputModel} from "../../../src/features/posts/types/output/postOutput.model";
 import {appConfig} from "../../../src/common/settings/config";
@@ -22,10 +21,14 @@ import {
 import {OutputErrorsType} from "../../../src/common/types/outputErrors.type";
 import {validateErrorsObject} from "../validateErrorsObject";
 import {LikeStatus} from "../../../src/common/types/enum/likeStatus";
+import {container} from "../../../src/composition-root";
+import {DB} from "../../../src/common/module/db/DB";
 
 
 describe('/posts', () => {
+
     const app=initApp()
+    const db = container.get<DB>(DB)
 
     beforeAll(async () => {
         //const mongoServer = await MongoMemoryServer.create()

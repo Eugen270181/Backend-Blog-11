@@ -1,10 +1,13 @@
 import {MongoMemoryServer} from "mongodb-memory-server";
-import {authServices, db, usersRepository} from "../../src/ioc";
 import {ResultStatus} from "../../src/common/types/enum/resultStatus";
 import {jwtServices} from "../../src/common/adapters/jwtServices";
+import {container} from "../../src/composition-root";
+import {DB} from "../../src/common/module/db/DB";
 
 
 describe('UNIT', () => {
+
+    const db = container.get<DB>(DB)
 
     beforeAll(async () => {
         const mongoServer = await MongoMemoryServer.create()

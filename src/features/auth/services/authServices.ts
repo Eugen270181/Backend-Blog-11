@@ -17,15 +17,16 @@ import {ExtLoginSuccessOutputModel} from "../types/output/extLoginSuccessOutput.
 import {UsersServices} from "../../users/services/usersServices";
 import {codeServices} from "../../../common/adapters/codeServices";
 import {dateServices} from "../../../common/adapters/dateServices";
-import {usersRepository} from "../../../ioc";
 import {UserIdType} from "../../../common/types/userId.type";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class AuthServices {
 
-    constructor(private securityServices: SecurityServices,
-                private securityRepository: SecurityRepository,
-                private usersServices: UsersServices,
-                private usersRepository: UsersRepository,) {
+    constructor(@inject(SecurityServices) private securityServices: SecurityServices,
+                @inject(SecurityRepository) private securityRepository: SecurityRepository,
+                @inject(UsersServices) private usersServices: UsersServices,
+                @inject(UsersRepository) private usersRepository: UsersRepository,) {
     }
 
     async loginUser(login: LoginInputModel, ip: string, title: string): Promise<Result<ExtLoginSuccessOutputModel | null>> {
@@ -190,7 +191,7 @@ export class AuthServices {
         const newExpirationDate = dateServices.genAddDate(new Date(),appConfig.EMAIL_TIME)
 
         foundUserByEmail.setRegConfirmationCode(newConfirmationCode, newExpirationDate)
-        await usersRepository.save(foundUserByEmail)
+        await this.usersRepository.save(foundUserByEmail)
 
 
         nodemailerServices

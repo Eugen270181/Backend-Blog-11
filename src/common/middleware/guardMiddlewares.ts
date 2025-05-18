@@ -5,15 +5,17 @@ import {NextFunction, Request, Response} from "express";
 import {IReqLogDto, IReqLogQuery} from "../../features/requestLogs/domain/requestsLog.entity";
 import {HttpStatus} from "../types/enum/httpStatus";
 import {ResultStatus} from "../types/enum/resultStatus";
+import {inject, injectable} from "inversify";
 
 export const ADMIN_LOGIN = "admin";
 export const ADMIN_PASS = "qwerty";
 export const ADMIN_TOKEN = 'Basic ' + Buffer.from(`${ADMIN_LOGIN}:${ADMIN_PASS}`).toString('base64');
 
+@injectable()
 export class ShieldMiddlewares {
-    constructor(private requestsLogsServices: RequestsLogsServices,
-                private requestsLogsQueryRepository: RequestsLogsQueryRepository,
-                private authServices: AuthServices) {
+    constructor(@inject(RequestsLogsServices) private requestsLogsServices: RequestsLogsServices,
+                @inject(RequestsLogsQueryRepository) private requestsLogsQueryRepository: RequestsLogsQueryRepository,
+                @inject(AuthServices) private authServices: AuthServices) {
     }
 
     rateLimitLogger = async (req: Request, res: Response, next: NextFunction) => {

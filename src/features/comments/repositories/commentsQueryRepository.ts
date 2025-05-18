@@ -3,15 +3,16 @@ import {SortQueryFilterType} from "../../../common/types/sortQueryFilter.type";
 import {CommentOutputModel} from "../types/output/commentOutput.model";
 import {Comment, CommentModelType} from "../domain/comment.entity";
 import {LikesCommentsRepository} from "../../likes/repository/likesCommentsRepository";
-import {db} from "../../../ioc";
 import {DB} from "../../../common/module/db/DB";
 import {LikeStatus} from "../../../common/types/enum/likeStatus";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class CommentsQueryRepository {
     private commentModel:CommentModelType
 
-    constructor(private db: DB,
-                private likesCommentsRepository: LikesCommentsRepository) {
+    constructor(@inject(DB) private db: DB,
+                @inject(LikesCommentsRepository) private likesCommentsRepository: LikesCommentsRepository) {
         this.commentModel = db.getModels().CommentModel
     }
     async findCommentById(_id: string):Promise< WithId<Comment> | null > {

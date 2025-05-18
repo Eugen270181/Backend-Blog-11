@@ -22,12 +22,14 @@ import {PostsQueryRepository} from "../../posts/repositories/postsQueryRepositor
 import {CreateBlogPostInputModel} from "../../posts/types/input/createBlogPostInput.model";
 import {PostOutputModel} from "../../posts/types/output/postOutput.model";
 import {PostsServices} from "../../posts/services/postsServices";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class BlogsController {
-    constructor( private blogsServices: BlogsServices,
-                 private blogsQueryRepository: BlogsQueryRepository,
-                 private postsServices: PostsServices,
-                 private postsQueryRepository: PostsQueryRepository) {}
+    constructor( @inject(BlogsServices) private blogsServices: BlogsServices,
+                 @inject(BlogsQueryRepository) private blogsQueryRepository: BlogsQueryRepository,
+                 @inject(PostsServices) private postsServices: PostsServices,
+                 @inject(PostsQueryRepository) private postsQueryRepository: PostsQueryRepository) {}
     //методы - контролеры
     createBlogController = async (req: RequestWithBody<CreateBlogInputModel>, res: Response<BlogOutputModel>)=> {
         const newBlogId = await this.blogsServices.createBlog(req.body)

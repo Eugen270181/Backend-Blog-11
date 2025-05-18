@@ -1,9 +1,10 @@
+import {container} from "../../../src/composition-root";
+
 const request = require("supertest");
 //import request from "supertest";
 
 import { createPosts } from "../posts/util/createGetPosts";
 import {initApp} from "../../../src/initApp";
-import {db} from "../../../src/ioc";
 import {appConfig} from "../../../src/common/settings/config";
 import {routersPaths} from "../../../src/common/settings/paths";
 import {createBlog} from "../blogs/utils/createGetBlogs";
@@ -18,11 +19,14 @@ import {LikeStatus} from "../../../src/common/types/enum/likeStatus";
 import {jwtServices} from "../../../src/common/adapters/jwtServices";
 import {OutputErrorsType} from "../../../src/common/types/outputErrors.type";
 import {validateErrorsObject} from "../validateErrorsObject";
+import {DB} from "../../../src/common/module/db/DB";
 
 
 
 describe('/comments',  () => {
+
     const app=initApp()
+    const db = container.get<DB>(DB)
 
     beforeAll(async () => {
         //const mongoServer = await MongoMemoryServer.create()

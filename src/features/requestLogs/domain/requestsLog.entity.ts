@@ -1,5 +1,8 @@
 import {HydratedDocument, Model, Schema} from "mongoose";
-import {db} from "../../../ioc";
+import {container} from "../../../composition-root";
+import {DB} from "../../../common/module/db/DB";
+
+
 
 export type SelReqLogFilter = {
     ip?: string;
@@ -30,6 +33,7 @@ export class RequestLog {
         requestLog.url = url;
         requestLog.createdAt = new Date(); // Устанавливаем текущую дату
 
+        const db = container.get<DB>(DB)
         const requestsLogModel = db.getModels().RequestLogModel;
         return new requestsLogModel(requestLog) as RequestLogDocument;
     }

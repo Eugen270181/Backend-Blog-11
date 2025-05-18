@@ -13,11 +13,12 @@ import {Pagination} from "../../../common/types/pagination.type";
 import {SortQueryFilterType} from "../../../common/types/sortQueryFilter.type";
 import {querySortSanitizer} from "../../../common/module/querySortSanitizer";
 import {UsersQueryFilterType} from "../types/usersQueryFilter.type";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class UsersController {
-    constructor(private usersServices : UsersServices,
-                private usersQueryRepository : UsersQueryRepository) {}
+    constructor(@inject(UsersServices) private usersServices : UsersServices,
+                @inject(UsersQueryRepository) private usersQueryRepository : UsersQueryRepository) {}
     createUserController = async (req: RequestWithBody<CreateUserInputModel>, res: Response<UserOutputModel|OutputErrorsType>)=> {
         const newUserResult = await this.usersServices.createUser(req.body)
 

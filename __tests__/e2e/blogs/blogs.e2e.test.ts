@@ -7,10 +7,11 @@ import {routersPaths} from "../../../src/common/settings/paths";
 import {appConfig} from "../../../src/common/settings/config";
 import {BlogOutputModel} from "../../../src/features/blogs/types/output/blogOutput.model";
 import {OutputErrorsType} from "../../../src/common/types/outputErrors.type";
-import {db} from "../../../src/ioc";
 import {BlogDto, createString, testingDtosCreator} from "../testingDtosCreator";
 import {createBlog, getBlogById, getBlogs, getBlogsQty} from "./utils/createGetBlogs";
 import {validateErrorsObject} from "../validateErrorsObject";
+import {container} from "../../../src/composition-root";
+import {DB} from "../../../src/common/module/db/DB";
 
 
 //import {MongoMemoryServer} from "mongodb-memory-server";
@@ -18,6 +19,7 @@ import {validateErrorsObject} from "../validateErrorsObject";
 describe(`<<BLOGS>> ENDPOINTS TESTING!!!`, ()=>{
 
     const app=initApp()
+    const db = container.get<DB>(DB)
 
     beforeAll(async () => {
         //const mongoServer = await MongoMemoryServer.create()

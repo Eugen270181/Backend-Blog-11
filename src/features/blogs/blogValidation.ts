@@ -1,5 +1,7 @@
 import {body} from "express-validator";
+import {injectable} from "inversify";
 
+@injectable()
 export class BlogValidation {
     nameValidator = body('name').isString().withMessage('not string')
         .trim().isLength({min: 1, max: 15}).withMessage('more then 15 or 0')

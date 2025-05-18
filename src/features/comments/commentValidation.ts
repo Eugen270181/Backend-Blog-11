@@ -1,5 +1,7 @@
 import {body} from "express-validator";
+import {injectable} from "inversify";
 
+@injectable()
 export class CommentValidation {
 
     contentCommentValidator = body('content').isString().withMessage('Login must be a string')

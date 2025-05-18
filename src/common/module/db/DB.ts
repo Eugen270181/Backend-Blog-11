@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 import {Blog, BlogModelType, blogSchema} from "../../../features/blogs/domain/blog.entity";
 import {Post, PostModelType, postSchema} from "../../../features/posts/domain/post.entity";
 import {
@@ -12,8 +11,9 @@ import {User, UserModelType, userSchema} from "../../../features/users/domain/us
 import {Comment, CommentModelType, commentSchema} from "../../../features/comments/domain/comment.entity";
 import {LikeComment, LikeCommentModelType, likeCommentSchema} from "../../../features/likes/domain/likeComment.entity";
 import {LikePost, LikePostModelType, likePostSchema} from "../../../features/likes/domain/likePost.entity";
+import { injectable } from "inversify";
 
-
+@injectable()
 export class DB {
     private client: mongoose.Connection
 

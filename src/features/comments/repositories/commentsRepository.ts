@@ -1,13 +1,12 @@
 import {CommentDocument, CommentModelType} from "../domain/comment.entity";
-import {db} from "../../../ioc";
 import {DB} from "../../../common/module/db/DB";
-import {LikesCommentsRepository} from "../../likes/repository/likesCommentsRepository";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class CommentsRepository {
     private commentModel:CommentModelType
 
-    constructor(private db: DB) {
+    constructor(@inject(DB) private db: DB) {
         this.commentModel = db.getModels().CommentModel
     }
 

@@ -1,6 +1,6 @@
 import {Model, HydratedDocument, Schema} from 'mongoose';
-
-import {db} from "../../../ioc";
+import {container} from "../../../composition-root";
+import {DB} from "../../../common/module/db/DB";
 
 
 export interface IPostDto {
@@ -31,6 +31,7 @@ export class Post {
         post.blogName = blogName
         post.createdAt = new Date()
 
+        const db = container.get<DB>(DB)
         const postModel = db.getModels().PostModel
 
         return new postModel(post) as PostDocument

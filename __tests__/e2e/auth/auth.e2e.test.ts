@@ -1,10 +1,11 @@
+import {container} from "../../../src/composition-root";
+
 const request = require("supertest");
 //import request from "supertest";
 import {MongoMemoryServer} from "mongodb-memory-server";
 
 import {initApp} from "../../../src/initApp";
 import {appConfig} from "../../../src/common/settings/config";
-import {db} from "../../../src/ioc";
 import {
     ConfirmPassDto,
     ConfirmRegDto, LoginDto, passTestsDefault,
@@ -29,10 +30,12 @@ import {RequestsLogsRepository} from "../../../src/features/requestLogs/reposito
 import {RequestsLogsQueryRepository} from "../../../src/features/requestLogs/repositories/requestsLogsQueryRepository";
 import {UserDocument} from "../../../src/features/users/domain/user.entity";
 import {hashServices} from "../../../src/common/adapters/hashServices";
+import {DB} from "../../../src/common/module/db/DB";
 
 describe(`<<AUTH>> ENDPOINTS TESTING!!!`, ()=>{
 
     const app=initApp()
+    const db = container.get<DB>(DB)
 
     beforeAll(async () => {
         spySendMail = jest.spyOn(nodemailerServices,'sendEmail').mockResolvedValue(true);//отключаем отправку писем

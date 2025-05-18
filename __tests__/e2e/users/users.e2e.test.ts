@@ -1,3 +1,5 @@
+import {container} from "../../../src/composition-root";
+
 const request = require("supertest")
 //import request from "supertest";
 import {MongoMemoryServer} from "mongodb-memory-server";
@@ -6,17 +8,18 @@ import {OutputErrorsType} from "../../../src/common/types/outputErrors.type";
 import {initApp} from "../../../src/initApp";
 import {createUserBySa, getUsersQty} from "./utils/createGetUsers";
 import {testingDtosCreator, UserDto} from "../testingDtosCreator";
-import {db} from "../../../src/ioc";
 import {ADMIN_LOGIN, ADMIN_PASS} from "../../../src/common/middleware/guardMiddlewares";
 import {appConfig} from "../../../src/common/settings/config";
 import {routersPaths} from "../../../src/common/settings/paths";
 import {UserOutputModel} from "../../../src/features/users/types/output/userOutput.type";
 import {validateErrorsObject} from "../validateErrorsObject";
+import {DB} from "../../../src/common/module/db/DB";
 
 
 describe(`<<USERS>> ENDPOINTS TESTING!!!`, () => {
 
     const app = initApp()
+    const db = container.get<DB>(DB)
 
     beforeAll(async () => {
         //const mongoServer = await MongoMemoryServer.create()

@@ -1,15 +1,15 @@
 import {Router} from 'express'
 import {routersPaths} from "../../common/settings/paths";
 import {AuthController} from "./controllers/auth.controller";
-import {ioc} from "../../ioc";
 import {ShieldMiddlewares} from "../../common/middleware/guardMiddlewares";
 import {ValidationMiddlewares} from "../../common/middleware/validationMiddlewares";
+import {container} from "../../composition-root";
 
 export const authRouter = Router()
 
-const guardInstance = ioc.getInstance<ShieldMiddlewares>(ShieldMiddlewares)
-const validationInstance = ioc.getInstance<ValidationMiddlewares>(ValidationMiddlewares)
-const authInstance = ioc.getInstance<AuthController>(AuthController)
+const guardInstance = container.get<ShieldMiddlewares>(ShieldMiddlewares)
+const validationInstance = container.get<ValidationMiddlewares>(ValidationMiddlewares)
+const authInstance = container.get<AuthController>(AuthController)
 
 
 //////////////////////////USER_REGISTRATION_ACTION/////////////////

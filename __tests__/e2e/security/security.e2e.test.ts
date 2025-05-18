@@ -1,21 +1,24 @@
+import {container} from "../../../src/composition-root";
+
 const request = require("supertest");
 //import request from "supertest";
 
 import {initApp} from "../../../src/initApp";
 import {routersPaths} from "../../../src/common/settings/paths";
-import {db} from "../../../src/ioc";
 import {appConfig} from "../../../src/common/settings/config";
 import {passTestsDefault, TokensDto} from "../testingDtosCreator";
 import {UserOutputModel} from "../../../src/features/users/types/output/userOutput.type";
 import {createUsersBySa} from "../users/utils/createGetUsers";
 import {getArrTokensWithUserLogins, getTokensWithLogin, logoutUser} from "../auth/utils/createGetAuth";
 import {SecurityOutputModel} from "../../../src/features/security/types/output/securityOutput.model";
+import {DB} from "../../../src/common/module/db/DB";
 
 
 
 describe(`<<SECURITY>> ENDPOINTS TESTING!!!`, ()=>{
 
     const app=initApp()
+    const db = container.get<DB>(DB)
 
     beforeAll(async () => {
         //const mongoServer = await MongoMemoryServer.create()

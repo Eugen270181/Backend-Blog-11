@@ -107,8 +107,7 @@ export const authControllerInstance = new AuthController(
 objects.push(authControllerInstance)
 //////////////////middlewares////////////////////////////////////////////////////////
 export const shieldMiddlewaresInstance = new ShieldMiddlewares(
-    requestsLogsServices,
-    requestsLogsQueryRepository,
+    requestsLogsServices,    requestsLogsQueryRepository,
     authServices
 )
 objects.push(shieldMiddlewaresInstance)
@@ -130,8 +129,8 @@ export const validationMiddlewaresInstance = new ValidationMiddlewares(
 )
 objects.push(validationMiddlewaresInstance)
 //////////////////////////IoC Container - метод получить заранее созданый объект из массива объектов////////////////////////
-export const ioc = {
-    getInstance<T>(ClassType: any) {
+export const manualContainer = {
+    get<T>(ClassType: any) {
         const targetInstance = objects.find((object) => object instanceof ClassType);
 
         return targetInstance as T;

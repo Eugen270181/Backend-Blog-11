@@ -24,13 +24,15 @@ import {pagCommentOutputModel} from "../../comments/types/output/pagCommentOutpu
 import {ResultStatus} from "../../../common/types/enum/resultStatus";
 import {LikeInputModel} from "../../likes/types/input/likeInput.model";
 import {LikesPostsServices} from "../../likes/services/likesPostsServices";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class PostsController {
-    constructor( private postsServices: PostsServices,
-                 private postsQueryRepository: PostsQueryRepository,
-                 private commentsServices: CommentsServices,
-                 private commentsQueryRepository: CommentsQueryRepository,
-                 private likesPostsServices: LikesPostsServices) {}
+    constructor( @inject(PostsServices) private postsServices: PostsServices,
+                 @inject(PostsQueryRepository) private postsQueryRepository: PostsQueryRepository,
+                 @inject(CommentsServices) private commentsServices: CommentsServices,
+                 @inject(CommentsQueryRepository) private commentsQueryRepository: CommentsQueryRepository,
+                 @inject(LikesPostsServices) private likesPostsServices: LikesPostsServices) {}
 
     createPostController = async (req: RequestWithBody<CreatePostInputModel>, res: Response<PostOutputModel>) => {
         const newPostId = await this.postsServices.createPost(req.body)

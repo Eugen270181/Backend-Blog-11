@@ -1,5 +1,7 @@
 import {query} from "express-validator";
+import {injectable} from "inversify";
 
+@injectable()
 export class QueryValidation {
 
     pageNumberValidation = query("pageNumber").toInt().default(1);

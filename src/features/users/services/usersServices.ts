@@ -4,10 +4,11 @@ import {hashServices} from "../../../common/adapters/hashServices";
 import {Result} from '../../../common/classes/result';
 import {ResultStatus} from "../../../common/types/enum/resultStatus";
 import {IUserDto, User, UserDocument} from "../domain/user.entity";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class UsersServices {
-    constructor(private usersRepository: UsersRepository) {}
+    constructor(@inject(UsersRepository) private usersRepository: UsersRepository) {}
     async createUser(user: CreateUserInputModel) {
         const result = new Result<string>()
         const {login, password, email} = user

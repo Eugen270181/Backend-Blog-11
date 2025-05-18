@@ -13,12 +13,13 @@ import {CreateCommentInputModel} from "../types/input/createCommentInput.model";
 import {CommentOutputModel} from "../types/output/commentOutput.model";
 import {LikeInputModel} from "../../likes/types/input/likeInput.model";
 import {LikesCommentsServices} from "../../likes/services/likesCommentsServices";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class CommentsController {
-    constructor(private commentsServices: CommentsServices,
-                private commentsQueryRepository: CommentsQueryRepository,
-                private likesCommentsServices: LikesCommentsServices,
+    constructor(@inject(CommentsServices) private commentsServices: CommentsServices,
+                @inject(CommentsQueryRepository) private commentsQueryRepository: CommentsQueryRepository,
+                @inject(LikesCommentsServices) private likesCommentsServices: LikesCommentsServices,
                 ) {}
     delCommentController = async (req: RequestWithParamsAndUserId<IdType,IdType>, res: Response) => {
         const userId = req.user?.userId as string

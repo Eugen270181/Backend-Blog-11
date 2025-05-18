@@ -1,16 +1,16 @@
 import {Router} from 'express'
-import {ioc} from "../../ioc";
 import {BlogsController} from "./controllers/blogs.controller";
 import {ShieldMiddlewares} from "../../common/middleware/guardMiddlewares";
 import {ValidationMiddlewares} from "../../common/middleware/validationMiddlewares";
+import {container} from "../../composition-root";
 
 
 
 export const blogsRouter = Router()
 
-const guardInstance = ioc.getInstance<ShieldMiddlewares>(ShieldMiddlewares)
-const validationInstance = ioc.getInstance<ValidationMiddlewares>(ValidationMiddlewares)
-const blogsInstance = ioc.getInstance<BlogsController>(BlogsController)
+const guardInstance = container.get<ShieldMiddlewares>(ShieldMiddlewares)
+const validationInstance = container.get<ValidationMiddlewares>(ValidationMiddlewares)
+const blogsInstance = container.get<BlogsController>(BlogsController)
 
 
 blogsRouter.get('/',

@@ -7,12 +7,14 @@ import {SecurityRepository} from "../repositories/securityRepository";
 import {SecurityServices} from "../services/securityServices";
 import {SecurityOutputModel} from "../types/output/securityOutput.model";
 import {SecurityQueryRepository} from "../repositories/securityQueryRepository";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class SecurityController {
-    constructor(private authServices : AuthServices,
-                private securityRepository : SecurityRepository,
-                private securityServices : SecurityServices,
-                private securityQueryRepository : SecurityQueryRepository
+    constructor(@inject(AuthServices) private authServices : AuthServices,
+                @inject(SecurityRepository) private securityRepository : SecurityRepository,
+                @inject(SecurityServices) private securityServices : SecurityServices,
+                @inject(SecurityQueryRepository) private securityQueryRepository : SecurityQueryRepository
     ) {}
 
     delSecurityDeviceController = async (req: RequestWithParams<IdType>, res: Response) => {

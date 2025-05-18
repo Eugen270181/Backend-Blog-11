@@ -1,9 +1,10 @@
 import {HydratedDocument, Model, Schema} from "mongoose";
-
-import {db} from "../../../ioc";
 import {codeServices} from "../../../common/adapters/codeServices";
 import {appConfig} from "../../../common/settings/config";
 import {dateServices} from "../../../common/adapters/dateServices";
+import {container} from "../../../composition-root";
+import {DB} from "../../../common/module/db/DB";
+
 
 
 export interface IUserDto {
@@ -40,6 +41,7 @@ export class User {
         user.passwordHash = hash
         user.createdAt = new Date()
 
+        const db = container.get<DB>(DB)
         const userModel = db.getModels().UserModel
 
         return new userModel(user) as UserDocument

@@ -13,10 +13,12 @@ import {PasswordRecoveryInputModel} from "../types/input/passwordRecoveryInput.m
 import {CreateUserInputModel} from "../../users/types/input/createUserInput.type";
 import {RegistrationConfirmationInputModel} from "../types/input/registrationConfirmationInputModel";
 import {RegistrationEmailResendingInputModel} from "../types/input/registrationEmailResendingInputModel";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class AuthController {
-    constructor(private authServices : AuthServices,
-                private usersQueryRepository : UsersQueryRepository,
+    constructor(@inject(AuthServices) private authServices : AuthServices,
+                @inject(UsersQueryRepository) private usersQueryRepository : UsersQueryRepository,
     ) {}
     getMeController = async (req: RequestWithUserId<IdType>, res: Response<MeOutputModel|{}>)=> {
         const userId = req.user?.userId as string;

@@ -4,11 +4,12 @@ import {UpdatePostInputModel} from "../types/input/updatePostInput.model";
 import {PostsRepository} from "../repositories/postsRepository";
 import {IPostDto, Post, PostDocument} from "../domain/post.entity";
 import {BlogDocument} from "../../blogs/domain/blog.entity";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class PostsServices {
-    constructor(private blogsRepository: BlogsRepository,
-                private postsRepository: PostsRepository) {}
+    constructor(@inject(BlogsRepository) private blogsRepository: BlogsRepository,
+                @inject(PostsRepository) private postsRepository: PostsRepository) {}
     async createPost(post: CreatePostInputModel):Promise<string | null> {
         const {title, shortDescription, content, blogId} = post
 

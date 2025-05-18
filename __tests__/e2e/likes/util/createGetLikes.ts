@@ -1,8 +1,10 @@
-import {LikeDto} from "../../testingDtosCreator";
-import {CommentOutputModel} from "../../../../src/features/comments/types/output/commentOutput.model";
-import request from "supertest";
+const request = require("supertest");
+//import request from 'supertest'
+
 import {routersPaths} from "../../../../src/common/settings/paths";
+import {LikeDto} from "../../testingDtosCreator";
 import {LikeStatus} from "../../../../src/common/types/enum/likeStatus";
+import {CommentOutputModel} from "../../../../src/features/comments/types/output/commentOutput.model";
 import {PostOutputModel} from "../../../../src/features/posts/types/output/postOutput.model";
 import {LikeDetailOutputModel} from "../../../../src/features/likes/types/output/extendedLikesInfoOutputModel";
 

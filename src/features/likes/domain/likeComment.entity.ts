@@ -1,6 +1,7 @@
 import {HydratedDocument, Model, Schema} from "mongoose";
-import {db} from "../../../ioc";
 import {LikeStatus} from "../../../common/types/enum/likeStatus";
+import {container} from "../../../composition-root";
+import {DB} from "../../../common/module/db/DB";
 
 
 export interface ILikeCommentDto {
@@ -23,6 +24,7 @@ export class LikeComment {
         likeComment.status = status
         likeComment.createdAt = new Date()
 
+        const db = container.get<DB>(DB)
         const likeCommentModel = db.getModels().LikeCommentModel
 
         return new likeCommentModel(likeComment) as LikeCommentDocument

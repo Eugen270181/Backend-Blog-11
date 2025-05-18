@@ -1,10 +1,12 @@
 import {BlogDocument, BlogModelType} from "../domain/blog.entity";
 import {DB} from "../../../common/module/db/DB";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class BlogsRepository {
     private blogModel:BlogModelType
 
-    constructor(private db: DB) {
+    constructor(@inject(DB) private db: DB) {
         this.blogModel = db.getModels().BlogModel
     }
 

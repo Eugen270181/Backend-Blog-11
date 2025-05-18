@@ -2,7 +2,6 @@ import {PostOutputModel} from "../../../src/features/posts/types/output/postOutp
 import {testingDtosCreator, TokensDto} from "../testingDtosCreator";
 import {UserOutputModel} from "../../../src/features/users/types/output/userOutput.type";
 import {initApp} from "../../../src/initApp";
-import {db} from "../../../src/ioc";
 import {appConfig} from "../../../src/common/settings/config";
 import {createUsersBySa} from "../users/utils/createGetUsers";
 import {getArrTokensWithUsersLogin} from "../auth/utils/createGetAuth";
@@ -16,6 +15,8 @@ import {LikePostDocument} from "../../../src/features/likes/domain/likePost.enti
 import {createPostComments, getCommentById} from "../comments/util/createGetComments";
 import {CommentOutputModel} from "../../../src/features/comments/types/output/commentOutput.model";
 import {LikeCommentDocument} from "../../../src/features/likes/domain/likeComment.entity";
+import {container} from "../../../src/composition-root";
+import {DB} from "../../../src/common/module/db/DB";
 
 const request = require("supertest");
 //import request from "supertest";
@@ -23,7 +24,9 @@ const request = require("supertest");
 ///hometask_12/api/posts/{postId}/like-status
 
 describe('LIKE_TESTS',  () => {
+
     const app=initApp()
+    const db = container.get<DB>(DB)
 
     beforeAll(async () => {
         //const mongoServer = await MongoMemoryServer.create()

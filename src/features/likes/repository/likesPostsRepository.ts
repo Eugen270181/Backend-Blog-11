@@ -1,13 +1,14 @@
 import {DB} from "../../../common/module/db/DB";
 import {LikePost, LikePostDocument, LikePostModelType} from "../domain/likePost.entity";
 import {LikeStatus} from "../../../common/types/enum/likeStatus";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class LikesPostsRepository {
 
     private likePostModel:LikePostModelType
 
-    constructor(private db: DB) {
+    constructor(@inject(DB) private db: DB) {
         this.likePostModel = db.getModels().LikePostModel
     }
 

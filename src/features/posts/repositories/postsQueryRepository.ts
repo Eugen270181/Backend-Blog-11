@@ -8,15 +8,15 @@ import {LikeStatus} from "../../../common/types/enum/likeStatus";
 import {LikeDetailOutputModel} from "../../likes/types/output/extendedLikesInfoOutputModel";
 import {LikePost} from "../../likes/domain/likePost.entity";
 import {UsersQueryRepository} from "../../users/repositories/usersQueryRepository";
+import {inject, injectable} from "inversify";
 
-
-
+@injectable()
 export class PostsQueryRepository {
     private postModel:PostModelType
 
-    constructor(private db: DB,
-                private likesPostsRepository: LikesPostsRepository,
-                private userQueryRepository: UsersQueryRepository) {
+    constructor(@inject(DB) private db: DB,
+                @inject(LikesPostsRepository) private likesPostsRepository: LikesPostsRepository,
+                @inject(UsersQueryRepository) private userQueryRepository: UsersQueryRepository) {
         this.postModel = db.getModels().PostModel
     }
     async findPostById(_id: string):Promise< WithId<Post> | null > {

@@ -1,6 +1,8 @@
 import {HydratedDocument, Model, Schema} from "mongoose";
+import {container} from "../../../composition-root";
+import {DB} from "../../../common/module/db/DB";
 
-import {db} from "../../../ioc";
+
 
 export interface ITimeSessionDto {
     lastActiveDate: Date,
@@ -31,7 +33,8 @@ export class Session {
         session.title = sessionDto.title
         session.lastActiveDate = sessionDto.lastActiveDate
         session.expDate = sessionDto.expDate
-        
+
+        const db = container.get<DB>(DB)
         const SessionModel = db.getModels().SessionModel
 
         return new SessionModel(session) as SessionDocument

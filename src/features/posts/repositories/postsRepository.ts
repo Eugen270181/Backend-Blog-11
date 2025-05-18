@@ -1,12 +1,12 @@
 import {PostDocument, PostModelType} from "../domain/post.entity";
-import {db} from "../../../ioc";
 import {DB} from "../../../common/module/db/DB";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class PostsRepository {
     private postModel:PostModelType
 
-    constructor(private db: DB) {
+    constructor(@inject(DB) private db: DB) {
         this.postModel = db.getModels().PostModel
     }
     async save(post: PostDocument): Promise<void> {

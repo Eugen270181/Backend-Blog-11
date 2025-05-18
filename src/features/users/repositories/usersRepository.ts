@@ -1,10 +1,12 @@
 import {UserDocument, UserModelType} from "../domain/user.entity";
 import {DB} from "../../../common/module/db/DB";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class UsersRepository {
     private userModel: UserModelType
 
-    constructor(private db: DB) {
+    constructor(@inject(DB) private db: DB) {
         this.userModel = db.getModels().UserModel
     }
     async save(userDocument: UserDocument) {
