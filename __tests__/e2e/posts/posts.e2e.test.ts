@@ -1,3 +1,4 @@
+import {container} from "../../../src/composition-root";
 import {ADMIN_LOGIN, ADMIN_PASS} from "../../../src/common/middleware/guardMiddlewares";
 
 const request = require("supertest");
@@ -21,7 +22,6 @@ import {
 import {OutputErrorsType} from "../../../src/common/types/outputErrors.type";
 import {validateErrorsObject} from "../validateErrorsObject";
 import {LikeStatus} from "../../../src/common/types/enum/likeStatus";
-import {container} from "../../../src/composition-root";
 import {DB} from "../../../src/common/module/db/DB";
 import {TYPES} from "../../../src/ioc-types";
 

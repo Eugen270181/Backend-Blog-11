@@ -27,7 +27,7 @@ export class Blog {
         blog.websiteUrl = websiteUrl
         blog.createdAt = new Date()
         blog.isMembership = false
-
+//TODO!!!!!!!!!!!
         const db = container.get<DB>(TYPES.DB)
         const blogModel = db.getModels().BlogModel
 

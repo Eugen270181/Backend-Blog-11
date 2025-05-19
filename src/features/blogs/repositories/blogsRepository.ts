@@ -6,7 +6,7 @@ import {TYPES} from "../../../ioc-types";
 @injectable()
 export class BlogsRepository {
     private blogModel:BlogModelType
-
+//TODO
     constructor(@inject(TYPES.DB) private db: DB) {
         this.blogModel = db.getModels().BlogModel
     }

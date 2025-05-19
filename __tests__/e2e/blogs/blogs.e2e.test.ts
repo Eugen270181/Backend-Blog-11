@@ -1,3 +1,4 @@
+import {container} from "../../../src/composition-root";
 import {ADMIN_LOGIN, ADMIN_PASS} from "../../../src/common/middleware/guardMiddlewares";
 
 const request = require("supertest");
@@ -10,7 +11,6 @@ import {OutputErrorsType} from "../../../src/common/types/outputErrors.type";
 import {BlogDto, createString, testingDtosCreator} from "../testingDtosCreator";
 import {createBlog, getBlogById, getBlogs, getBlogsQty} from "./utils/createGetBlogs";
 import {validateErrorsObject} from "../validateErrorsObject";
-import {container} from "../../../src/composition-root";
 import {DB} from "../../../src/common/module/db/DB";
 import {TYPES} from "../../../src/ioc-types";
 
