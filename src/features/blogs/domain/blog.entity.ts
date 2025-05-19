@@ -1,6 +1,7 @@
 import {HydratedDocument, Model, Schema} from 'mongoose';
 import {container} from "../../../composition-root";
 import {DB} from "../../../common/module/db/DB";
+import {TYPES} from "../../../ioc-types";
 
 
 export interface IBlogDto {
@@ -27,7 +28,7 @@ export class Blog {
         blog.createdAt = new Date()
         blog.isMembership = false
 
-        const db = container.get<DB>(DB)
+        const db = container.get<DB>(TYPES.DB)
         const blogModel = db.getModels().BlogModel
 
         return new blogModel(blog) as BlogDocument

@@ -6,13 +6,15 @@ import {LikesCommentsRepository} from "../../likes/repository/likesCommentsRepos
 import {DB} from "../../../common/module/db/DB";
 import {LikeStatus} from "../../../common/types/enum/likeStatus";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class CommentsQueryRepository {
+
     private commentModel:CommentModelType
 
-    constructor(@inject(DB) private db: DB,
-                @inject(LikesCommentsRepository) private likesCommentsRepository: LikesCommentsRepository) {
+    constructor(@inject(TYPES.DB) private db: DB,
+                @inject(TYPES.LikesCommentsRepository) private likesCommentsRepository: LikesCommentsRepository) {
         this.commentModel = db.getModels().CommentModel
     }
     async findCommentById(_id: string):Promise< WithId<Comment> | null > {

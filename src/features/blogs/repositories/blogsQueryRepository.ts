@@ -5,12 +5,13 @@ import {Pagination} from "../../../common/types/pagination.type";
 import {BlogsQueryFilterType} from "../types/blogsQueryFilter.type";
 import {Blog, BlogModelType} from "../domain/blog.entity";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class BlogsQueryRepository {
     private blogModel:BlogModelType
 
-    constructor(@inject(DB) private db: DB) {
+    constructor(@inject(TYPES.DB) private db: DB) {
         this.blogModel = db.getModels().BlogModel
     }
     async findBlogById(_id: string):Promise< WithId<Blog> | null > {

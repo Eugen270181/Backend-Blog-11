@@ -1,6 +1,7 @@
 import {HydratedDocument, Model, Schema} from "mongoose";
 import {container} from "../../../composition-root";
 import {DB} from "../../../common/module/db/DB";
+import {TYPES} from "../../../ioc-types";
 
 
 export interface ICommentDto {
@@ -35,7 +36,7 @@ export class Comment {
         }
         comment.createdAt = new Date()
 
-        const db = container.get<DB>(DB)
+        const db = container.get<DB>(TYPES.DB)
         const commentModel = db.getModels().CommentModel
 
         return new commentModel(comment) as CommentDocument

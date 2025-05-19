@@ -14,11 +14,13 @@ import {SortQueryFilterType} from "../../../common/types/sortQueryFilter.type";
 import {querySortSanitizer} from "../../../common/module/querySortSanitizer";
 import {UsersQueryFilterType} from "../types/usersQueryFilter.type";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
+
 
 @injectable()
 export class UsersController {
-    constructor(@inject(UsersServices) private usersServices : UsersServices,
-                @inject(UsersQueryRepository) private usersQueryRepository : UsersQueryRepository) {}
+    constructor(@inject(TYPES.UsersServices) private usersServices : UsersServices,
+                @inject(TYPES.UsersQueryRepository) private usersQueryRepository : UsersQueryRepository) {}
     createUserController = async (req: RequestWithBody<CreateUserInputModel>, res: Response<UserOutputModel|OutputErrorsType>)=> {
         const newUserResult = await this.usersServices.createUser(req.body)
 

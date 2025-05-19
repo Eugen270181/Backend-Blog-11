@@ -3,10 +3,11 @@ import {CreateBlogInputModel} from "../types/input/createBlogInput.model";
 import {UpdateBlogInputModel} from "../types/input/updateblogInput.model";
 import {Blog, BlogDocument, IBlogDto} from "../domain/blog.entity";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class BlogsServices {
-    constructor(@inject(BlogsRepository) private blogsRepository: BlogsRepository) {}
+    constructor(@inject(TYPES.BlogsRepository) private blogsRepository: BlogsRepository) {}
     async createBlog(blog: CreateBlogInputModel):Promise<string> {
         const {name, description, websiteUrl} = blog
 

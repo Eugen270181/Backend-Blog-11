@@ -9,25 +9,26 @@ import {LikeDetailOutputModel} from "../../likes/types/output/extendedLikesInfoO
 import {LikePost} from "../../likes/domain/likePost.entity";
 import {UsersQueryRepository} from "../../users/repositories/usersQueryRepository";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class PostsQueryRepository {
     private postModel:PostModelType
 
-    constructor(@inject(DB) private db: DB,
-                @inject(LikesPostsRepository) private likesPostsRepository: LikesPostsRepository,
-                @inject(UsersQueryRepository) private userQueryRepository: UsersQueryRepository) {
+    constructor(@inject(TYPES.DB) private db: DB,
+                @inject(TYPES.LikesPostsRepository) private likesPostsRepository: LikesPostsRepository,
+                @inject(TYPES.UsersQueryRepository) private userQueryRepository: UsersQueryRepository) {
         this.postModel = db.getModels().PostModel
     }
     async findPostById(_id: string):Promise< WithId<Post> | null > {
-        return this.postModel.findOne({ _id , deletedAt:null}).lean().catch(()=> null );
+        return this.postModel.findOne({ _id , deletedAt: null }).lean().catch(()=> null );
     }
     async findPostAndMap(postId: string, userId?:string) {
         const post = await this.findPostById(postId)
         return post?this.mapPost(post, userId):null
     }
     async getPostsAndMap(query:SortQueryFilterType, userId?:string, blogId?:string):Promise<pagPostOutputModel> { // используем этот метод если проверили валидность и существование в бд значения blogid
-        const filter = blogId?{blogId, deletedAt:null}:{deletedAt:null}
+        const filter = blogId?{ blogId, deletedAt:null }:{ deletedAt:null }
         //const search = query.searchNameTerm ? {title:{$regex:query.searchNameTerm,$options:'i'}}:{}
         try {
             const posts = await this.postModel

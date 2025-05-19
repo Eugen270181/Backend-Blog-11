@@ -12,13 +12,14 @@ import {createUsersBySa} from "../users/utils/createGetUsers";
 import {getArrTokensWithUserLogins, getTokensWithLogin, logoutUser} from "../auth/utils/createGetAuth";
 import {SecurityOutputModel} from "../../../src/features/security/types/output/securityOutput.model";
 import {DB} from "../../../src/common/module/db/DB";
+import {TYPES} from "../../../src/ioc-types";
 
 
 
 describe(`<<SECURITY>> ENDPOINTS TESTING!!!`, ()=>{
 
     const app=initApp()
-    const db = container.get<DB>(DB)
+    const db = container.get<DB>(TYPES.DB)
 
     beforeAll(async () => {
         //const mongoServer = await MongoMemoryServer.create()

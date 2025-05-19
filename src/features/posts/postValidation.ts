@@ -1,10 +1,11 @@
 import {body} from "express-validator";
 import {BlogsRepository} from "../blogs/repositories/blogsRepository";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../ioc-types";
 
 @injectable()
 export class PostValidation {
-    constructor(@inject(BlogsRepository) private blogsRepository: BlogsRepository) {}
+    constructor(@inject(TYPES.BlogsRepository) private blogsRepository: BlogsRepository) {}
     titleValidator = body('title').isString().withMessage('not string')
         .trim().isLength({min: 1, max: 30}).withMessage('more then 30 or 0')
 

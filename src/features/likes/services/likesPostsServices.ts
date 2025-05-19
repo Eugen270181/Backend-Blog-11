@@ -6,12 +6,13 @@ import {LikeStatus} from "../../../common/types/enum/likeStatus";
 import {ResultStatus} from "../../../common/types/enum/resultStatus";
 import {ILikePostDto, LikePost, LikePostDocument} from "../domain/likePost.entity";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class LikesPostsServices {
-    constructor(@inject(LikesPostsRepository) private likesPostsRepository: LikesPostsRepository,
-                @inject(UsersRepository) private usersRepository: UsersRepository,
-                @inject(PostsRepository) private postsRepository: PostsRepository) {}
+    constructor(@inject(TYPES.LikesPostsRepository) private likesPostsRepository: LikesPostsRepository,
+                @inject(TYPES.UsersRepository) private usersRepository: UsersRepository,
+                @inject(TYPES.PostsRepository) private postsRepository: PostsRepository) {}
     async updatePostLike(likeInput: LikeInputModel, postId:string, userId:string) {
         const newLikeStatus = likeInput.likeStatus
         if (!(newLikeStatus in LikeStatus)) return ResultStatus.BadRequest;

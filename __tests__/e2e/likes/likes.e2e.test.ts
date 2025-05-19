@@ -17,6 +17,7 @@ import {CommentOutputModel} from "../../../src/features/comments/types/output/co
 import {LikeCommentDocument} from "../../../src/features/likes/domain/likeComment.entity";
 import {container} from "../../../src/composition-root";
 import {DB} from "../../../src/common/module/db/DB";
+import {TYPES} from "../../../src/ioc-types";
 
 const request = require("supertest");
 //import request from "supertest";
@@ -26,7 +27,7 @@ const request = require("supertest");
 describe('LIKE_TESTS',  () => {
 
     const app=initApp()
-    const db = container.get<DB>(DB)
+    const db = container.get<DB>(TYPES.DB)
 
     beforeAll(async () => {
         //const mongoServer = await MongoMemoryServer.create()

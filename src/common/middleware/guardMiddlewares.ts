@@ -6,6 +6,7 @@ import {IReqLogDto, IReqLogQuery} from "../../features/requestLogs/domain/reques
 import {HttpStatus} from "../types/enum/httpStatus";
 import {ResultStatus} from "../types/enum/resultStatus";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../ioc-types";
 
 export const ADMIN_LOGIN = "admin";
 export const ADMIN_PASS = "qwerty";
@@ -13,9 +14,9 @@ export const ADMIN_TOKEN = 'Basic ' + Buffer.from(`${ADMIN_LOGIN}:${ADMIN_PASS}`
 
 @injectable()
 export class ShieldMiddlewares {
-    constructor(@inject(RequestsLogsServices) private requestsLogsServices: RequestsLogsServices,
-                @inject(RequestsLogsQueryRepository) private requestsLogsQueryRepository: RequestsLogsQueryRepository,
-                @inject(AuthServices) private authServices: AuthServices) {
+    constructor(@inject(TYPES.RequestsLogsServices) private requestsLogsServices: RequestsLogsServices,
+                @inject(TYPES.RequestsLogsQueryRepository) private requestsLogsQueryRepository: RequestsLogsQueryRepository,
+                @inject(TYPES.AuthServices) private authServices: AuthServices) {
     }
 
     rateLimitLogger = async (req: Request, res: Response, next: NextFunction) => {

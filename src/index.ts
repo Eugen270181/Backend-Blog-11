@@ -1,13 +1,15 @@
+import 'reflect-metadata'; // Должен быть первым!
 import {Request, Response} from 'express'
 import {appConfig} from './common/settings/config'
 import {initApp} from "./initApp";
 import {routersPaths} from "./common/settings/paths";
 import {DB} from "./common/module/db/DB";
 import {container} from "./composition-root";
+import { TYPES } from './ioc-types';
 
 const app = initApp()
 
-const dbInstance = container.get<DB>(DB)
+const dbInstance = container.get<DB>(TYPES.DB)
 
 app.get(routersPaths.common, (req:Request, res:Response) => {
     // эндпоинт, который будет показывать на верселе какая версия бэкэнда сейчас залита

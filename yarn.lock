@@ -2119,18 +2119,9 @@ inherits@2, inherits@2.0.4, inherits@^2.0.3:
   resolved "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
-inversify@*:
+inversify@*, inversify@^7.5.1:
   version "7.5.1"
   resolved "https://registry.npmjs.org/inversify/-/inversify-7.5.1.tgz"
-  integrity sha512-oWWFDU2BXiuqZynGcLDDD4tqiWAeaEUCALlCj0vk/QwHGgZY/tzDFPuTmWMY3jwRmDIHxVDkcj9SL3MFTlCEDw==
-  dependencies:
-    "@inversifyjs/common" "1.5.0"
-    "@inversifyjs/container" "1.9.1"
-    "@inversifyjs/core" "5.2.0"
-
-inversify@^7.5.1:
-  version "7.5.1"
-  resolved "https://registry.yarnpkg.com/inversify/-/inversify-7.5.1.tgz#aa69cf594d7703b63a2e77902f8c47e172840bf0"
   integrity sha512-oWWFDU2BXiuqZynGcLDDD4tqiWAeaEUCALlCj0vk/QwHGgZY/tzDFPuTmWMY3jwRmDIHxVDkcj9SL3MFTlCEDw==
   dependencies:
     "@inversifyjs/common" "1.5.0"

@@ -2,13 +2,14 @@ import {SessionFindType} from "../../../common/types/sessionFind.type";
 import {SessionDocument, SessionModelType} from "../domain/session.entity";
 import {DB} from "../../../common/module/db/DB";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 
 @injectable()
 export class SecurityRepository {
     private sessionModel:SessionModelType
 
-    constructor(@inject(DB) private db: DB) {
+    constructor(@inject(TYPES.DB) private db: DB) {
         this.sessionModel = db.getModels().SessionModel
     }
     async save(sessionDocument: SessionDocument):Promise<void> {

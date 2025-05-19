@@ -1,6 +1,7 @@
 import {HydratedDocument, Model, Schema} from "mongoose";
 import {container} from "../../../composition-root";
 import {DB} from "../../../common/module/db/DB";
+import {TYPES} from "../../../ioc-types";
 
 
 
@@ -33,7 +34,7 @@ export class RequestLog {
         requestLog.url = url;
         requestLog.createdAt = new Date(); // Устанавливаем текущую дату
 
-        const db = container.get<DB>(DB)
+        const db = container.get<DB>(TYPES.DB)
         const requestsLogModel = db.getModels().RequestLogModel;
         return new requestsLogModel(requestLog) as RequestLogDocument;
     }

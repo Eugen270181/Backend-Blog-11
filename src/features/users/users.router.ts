@@ -3,12 +3,13 @@ import {UsersController} from "./controllers/users.controller";
 import {ValidationMiddlewares} from "../../common/middleware/validationMiddlewares";
 import {ShieldMiddlewares} from "../../common/middleware/guardMiddlewares";
 import {container} from "../../composition-root";
+import {TYPES} from "../../ioc-types";
 
 export const usersRouter = Router()
 
-const guardInstance = container.get<ShieldMiddlewares>(ShieldMiddlewares)
-const validationInstance = container.get<ValidationMiddlewares>(ValidationMiddlewares)
-const usersInstance = container.get<UsersController>(UsersController)
+const guardInstance = container.get<ShieldMiddlewares>(TYPES.ShieldMiddlewares)
+const validationInstance = container.get<ValidationMiddlewares>(TYPES.ValidationMiddlewares)
+const usersInstance = container.get<UsersController>(TYPES.UsersController)
 
 
 usersRouter.get('/',

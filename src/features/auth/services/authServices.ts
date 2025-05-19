@@ -19,14 +19,15 @@ import {codeServices} from "../../../common/adapters/codeServices";
 import {dateServices} from "../../../common/adapters/dateServices";
 import {UserIdType} from "../../../common/types/userId.type";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class AuthServices {
 
-    constructor(@inject(SecurityServices) private securityServices: SecurityServices,
-                @inject(SecurityRepository) private securityRepository: SecurityRepository,
-                @inject(UsersServices) private usersServices: UsersServices,
-                @inject(UsersRepository) private usersRepository: UsersRepository,) {
+    constructor(@inject(TYPES.SecurityServices) private securityServices: SecurityServices,
+                @inject(TYPES.SecurityRepository) private securityRepository: SecurityRepository,
+                @inject(TYPES.UsersServices) private usersServices: UsersServices,
+                @inject(TYPES.UsersRepository) private usersRepository: UsersRepository,) {
     }
 
     async loginUser(login: LoginInputModel, ip: string, title: string): Promise<Result<ExtLoginSuccessOutputModel | null>> {

@@ -38,51 +38,54 @@ import {LikeValidation} from "./features/likes/likeValidation";
 import {QueryValidation} from "./common/middleware/queryValidation";
 import {ShieldMiddlewares} from "./common/middleware/guardMiddlewares";
 import {ValidationMiddlewares} from "./common/middleware/validationMiddlewares";
+import {TYPES} from "./ioc-types";
 //...
 export const container = new Container();
 //////////////////DB//////////////////////////////////////////////////////
-container.bind(DB).to(DB)
+container.bind<DB>(TYPES.DB).to(DB).inSingletonScope();
 //////////////////DAL - Repositories//////////////////////////////////////
-container.bind(UsersRepository).to(UsersRepository)
-container.bind(UsersQueryRepository).to(UsersQueryRepository)
-container.bind(BlogsRepository).to(BlogsRepository)
-container.bind(BlogsQueryRepository).to(BlogsQueryRepository)
-container.bind(LikesPostsRepository).to(LikesPostsRepository)
-container.bind(PostsRepository).to(PostsRepository)
-container.bind(PostsQueryRepository).to(PostsQueryRepository)
-container.bind(LikesCommentsRepository).to(LikesCommentsRepository)
-container.bind(CommentsRepository).to(CommentsRepository)
-container.bind(CommentsQueryRepository).to(CommentsQueryRepository)
-container.bind(SecurityRepository).to(SecurityRepository)
-container.bind(SecurityQueryRepository).to(SecurityQueryRepository)
-container.bind(RequestsLogsRepository).to(RequestsLogsRepository)
-container.bind(RequestsLogsQueryRepository).to(RequestsLogsQueryRepository)
+container.bind<UsersRepository>(TYPES.UsersRepository).to(UsersRepository);
+container.bind<UsersQueryRepository>(TYPES.UsersQueryRepository).to(UsersQueryRepository)
+container.bind<BlogsRepository>(TYPES.BlogsRepository).to(BlogsRepository)
+container.bind<BlogsQueryRepository>(TYPES.BlogsQueryRepository).to(BlogsQueryRepository)
+container.bind<LikesPostsRepository>(TYPES.LikesPostsRepository).to(LikesPostsRepository)
+container.bind<PostsRepository>(TYPES.PostsRepository).to(PostsRepository)
+container.bind<PostsQueryRepository>(TYPES.PostsQueryRepository).to(PostsQueryRepository)
+container.bind<LikesCommentsRepository>(TYPES.LikesCommentsRepository).to(LikesCommentsRepository)
+container.bind<CommentsRepository>(TYPES.CommentsRepository).to(CommentsRepository)
+container.bind<CommentsQueryRepository>(TYPES.CommentsQueryRepository).to(CommentsQueryRepository)
+container.bind<SecurityRepository>(TYPES.SecurityRepository).to(SecurityRepository)
+container.bind<SecurityQueryRepository>(TYPES.SecurityQueryRepository).to(SecurityQueryRepository)
+container.bind<RequestsLogsRepository>(TYPES.RequestsLogsRepository).to(RequestsLogsRepository)
+container.bind<RequestsLogsQueryRepository>(TYPES.RequestsLogsQueryRepository).to(RequestsLogsQueryRepository)
 //////////////////BLL - Services//////////////////////////////////////////
-container.bind(UsersServices).to(UsersServices)
-container.bind(BlogsServices).to(BlogsServices)
-container.bind(PostsServices).to(PostsServices)
-container.bind(LikesPostsServices).to(LikesPostsServices)
-container.bind(CommentsServices).to(CommentsServices)
-container.bind(LikesCommentsServices).to(LikesCommentsServices)
-container.bind(SecurityServices).to(SecurityServices)
-container.bind(AuthServices).to(AuthServices)
-container.bind(RequestsLogsServices).to(RequestsLogsServices)
+container.bind<UsersServices>(TYPES.UsersServices).to(UsersServices)
+container.bind<BlogsServices>(TYPES.BlogsServices).to(BlogsServices)
+container.bind<PostsServices>(TYPES.PostsServices).to(PostsServices)
+container.bind<LikesPostsServices>(TYPES.LikesPostsServices).to(LikesPostsServices)
+container.bind<CommentsServices>(TYPES.CommentsServices).to(CommentsServices)
+container.bind<LikesCommentsServices>(TYPES.LikesCommentsServices).to(LikesCommentsServices)
+container.bind<SecurityServices>(TYPES.SecurityServices).to(SecurityServices)
+container.bind<AuthServices>(TYPES.AuthServices).to(AuthServices)
+container.bind<RequestsLogsServices>(TYPES.RequestsLogsServices).to(RequestsLogsServices)
 ///////////////////Presentation Layer - Controllers/////////////////////////
-container.bind(BlogsController).to(BlogsController)
-container.bind(PostsController).to(PostsController)
-container.bind(CommentsController).to(CommentsController)
-container.bind(UsersController).to(UsersController)
-container.bind(SecurityController).to(SecurityController)
-container.bind(AuthController).to(AuthController)
+container.bind<BlogsController>(TYPES.BlogsController).to(BlogsController)
+container.bind<PostsController>(TYPES.PostsController).to(PostsController)
+container.bind<CommentsController>(TYPES.CommentsController).to(CommentsController)
+container.bind<UsersController>(TYPES.UsersController).to(UsersController)
+container.bind<SecurityController>(TYPES.SecurityController).to(SecurityController)
+container.bind<AuthController>(TYPES.AuthController).to(AuthController)
 //////////////////middlewares////////////////////////////////////////////////////////
-container.bind(AuthValidation).to(AuthValidation)
-container.bind(BlogValidation).to(BlogValidation)
-container.bind(PostValidation).to(PostValidation)
-container.bind(CommentValidation).to(CommentValidation)
-container.bind(LikeValidation).to(LikeValidation)
-container.bind(QueryValidation).to(QueryValidation)
+container.bind<AuthValidation>(TYPES.AuthValidation).to(AuthValidation)
+container.bind<BlogValidation>(TYPES.BlogValidation).to(BlogValidation)
+container.bind<PostValidation>(TYPES.PostValidation).to(PostValidation)
+container.bind<CommentValidation>(TYPES.CommentValidation).to(CommentValidation)
+container.bind<LikeValidation>(TYPES.LikeValidation).to(LikeValidation)
+container.bind<QueryValidation>(TYPES.QueryValidation).to(QueryValidation)
 
-container.bind(ValidationMiddlewares).to(ValidationMiddlewares)
-container.bind(ShieldMiddlewares).to(ShieldMiddlewares)
+container.bind<ValidationMiddlewares>(TYPES.ValidationMiddlewares).to(ValidationMiddlewares)
+container.bind<ShieldMiddlewares>(TYPES.ShieldMiddlewares).to(ShieldMiddlewares)
+
+
 
 

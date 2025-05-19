@@ -14,11 +14,12 @@ import {CreateUserInputModel} from "../../users/types/input/createUserInput.type
 import {RegistrationConfirmationInputModel} from "../types/input/registrationConfirmationInputModel";
 import {RegistrationEmailResendingInputModel} from "../types/input/registrationEmailResendingInputModel";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class AuthController {
-    constructor(@inject(AuthServices) private authServices : AuthServices,
-                @inject(UsersQueryRepository) private usersQueryRepository : UsersQueryRepository,
+    constructor(@inject(TYPES.AuthServices) private authServices : AuthServices,
+                @inject(TYPES.UsersQueryRepository) private usersQueryRepository : UsersQueryRepository,
     ) {}
     getMeController = async (req: RequestWithUserId<IdType>, res: Response<MeOutputModel|{}>)=> {
         const userId = req.user?.userId as string;

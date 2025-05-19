@@ -4,6 +4,7 @@ import {appConfig} from "../../../common/settings/config";
 import {dateServices} from "../../../common/adapters/dateServices";
 import {container} from "../../../composition-root";
 import {DB} from "../../../common/module/db/DB";
+import {TYPES} from "../../../ioc-types";
 
 
 
@@ -41,7 +42,7 @@ export class User {
         user.passwordHash = hash
         user.createdAt = new Date()
 
-        const db = container.get<DB>(DB)
+        const db = container.get<DB>(TYPES.DB)
         const userModel = db.getModels().UserModel
 
         return new userModel(user) as UserDocument

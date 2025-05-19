@@ -1,10 +1,11 @@
 import {SecurityRepository} from "../repositories/securityRepository";
 import {ISessionDto, ITimeSessionDto, Session, SessionDocument} from "../domain/session.entity";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class SecurityServices {
-    constructor(@inject(SecurityRepository) private securityRepository:SecurityRepository) {}
+    constructor(@inject(TYPES.SecurityRepository) private securityRepository:SecurityRepository) {}
     async createSession(sessionDto:ISessionDto) {
         const newSessionDocument:SessionDocument = Session.createSessionDocument(sessionDto)
 

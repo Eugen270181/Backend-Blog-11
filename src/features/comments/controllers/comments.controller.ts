@@ -14,12 +14,13 @@ import {CommentOutputModel} from "../types/output/commentOutput.model";
 import {LikeInputModel} from "../../likes/types/input/likeInput.model";
 import {LikesCommentsServices} from "../../likes/services/likesCommentsServices";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class CommentsController {
-    constructor(@inject(CommentsServices) private commentsServices: CommentsServices,
-                @inject(CommentsQueryRepository) private commentsQueryRepository: CommentsQueryRepository,
-                @inject(LikesCommentsServices) private likesCommentsServices: LikesCommentsServices,
+    constructor(@inject(TYPES.CommentsServices) private commentsServices: CommentsServices,
+                @inject(TYPES.CommentsQueryRepository) private commentsQueryRepository: CommentsQueryRepository,
+                @inject(TYPES.LikesCommentsServices) private likesCommentsServices: LikesCommentsServices,
                 ) {}
     delCommentController = async (req: RequestWithParamsAndUserId<IdType,IdType>, res: Response) => {
         const userId = req.user?.userId as string

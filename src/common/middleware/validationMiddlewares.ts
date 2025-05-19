@@ -8,16 +8,17 @@ import {CommentValidation} from "../../features/comments/commentValidation";
 import {AuthValidation} from "../../features/auth/authValidation";
 import {QueryValidation} from "./queryValidation";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../ioc-types";
 
 @injectable()
 export class ValidationMiddlewares {
 
-    constructor(@inject(AuthValidation) private authValidation: AuthValidation,
-                @inject(BlogValidation) private blogValidation: BlogValidation,
-                @inject(PostValidation) private postValidation: PostValidation,
-                @inject(CommentValidation) private commentValidation: CommentValidation,
-                @inject(LikeValidation) private likeValidation: LikeValidation,
-                @inject(QueryValidation) private queryValidation: QueryValidation
+    constructor(@inject(TYPES.AuthValidation) private authValidation: AuthValidation,
+                @inject(TYPES.BlogValidation) private blogValidation: BlogValidation,
+                @inject(TYPES.PostValidation) private postValidation: PostValidation,
+                @inject(TYPES.CommentValidation) private commentValidation: CommentValidation,
+                @inject(TYPES.LikeValidation) private likeValidation: LikeValidation,
+                @inject(TYPES.QueryValidation) private queryValidation: QueryValidation
     ) {}
 
     get querySortSanitizers() {

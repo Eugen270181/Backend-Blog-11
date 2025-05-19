@@ -2,12 +2,13 @@ import {LikeCommentDocument, LikeCommentModelType} from "../domain/likeComment.e
 
 import {DB} from "../../../common/module/db/DB";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class LikesCommentsRepository {
     private likeCommentModel:LikeCommentModelType
 
-    constructor(@inject(DB) private db: DB) {
+    constructor(@inject(TYPES.DB) private db: DB) {
         this.likeCommentModel = db.getModels().LikeCommentModel
     }
 

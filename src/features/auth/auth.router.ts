@@ -4,12 +4,13 @@ import {AuthController} from "./controllers/auth.controller";
 import {ShieldMiddlewares} from "../../common/middleware/guardMiddlewares";
 import {ValidationMiddlewares} from "../../common/middleware/validationMiddlewares";
 import {container} from "../../composition-root";
+import {TYPES} from "../../ioc-types";
 
 export const authRouter = Router()
 
-const guardInstance = container.get<ShieldMiddlewares>(ShieldMiddlewares)
-const validationInstance = container.get<ValidationMiddlewares>(ValidationMiddlewares)
-const authInstance = container.get<AuthController>(AuthController)
+const guardInstance = container.get<ShieldMiddlewares>(TYPES.ShieldMiddlewares)
+const validationInstance = container.get<ValidationMiddlewares>(TYPES.ValidationMiddlewares)
+const authInstance = container.get<AuthController>(TYPES.AuthController)
 
 
 //////////////////////////USER_REGISTRATION_ACTION/////////////////

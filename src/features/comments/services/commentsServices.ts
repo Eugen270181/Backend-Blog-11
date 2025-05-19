@@ -7,13 +7,14 @@ import {Comment, CommentDocument, ICommentDto} from "../domain/comment.entity";
 import {PostsRepository} from "../../posts/repositories/postsRepository";
 import {Result} from "../../../common/classes/result";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 
 @injectable()
 export class CommentsServices {
-    constructor(@inject(CommentsRepository) private commentsRepository: CommentsRepository,
-                @inject(PostsRepository) private postsRepository: PostsRepository,
-                @inject(UsersRepository) private usersRepository: UsersRepository) {}
+    constructor(@inject(TYPES.CommentsRepository) private commentsRepository: CommentsRepository,
+                @inject(TYPES.PostsRepository) private postsRepository: PostsRepository,
+                @inject(TYPES.UsersRepository) private usersRepository: UsersRepository) {}
     async createComment(commentInput: CreateCommentInputModel, postId:string, userId:string) {
         const result = new Result<string>()
         const {content} = commentInput

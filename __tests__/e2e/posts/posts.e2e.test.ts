@@ -23,12 +23,13 @@ import {validateErrorsObject} from "../validateErrorsObject";
 import {LikeStatus} from "../../../src/common/types/enum/likeStatus";
 import {container} from "../../../src/composition-root";
 import {DB} from "../../../src/common/module/db/DB";
+import {TYPES} from "../../../src/ioc-types";
 
 
 describe('/posts', () => {
 
     const app=initApp()
-    const db = container.get<DB>(DB)
+    const db = container.get<DB>(TYPES.DB)
 
     beforeAll(async () => {
         //const mongoServer = await MongoMemoryServer.create()

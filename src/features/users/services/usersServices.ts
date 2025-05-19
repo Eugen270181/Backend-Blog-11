@@ -5,10 +5,11 @@ import {Result} from '../../../common/classes/result';
 import {ResultStatus} from "../../../common/types/enum/resultStatus";
 import {IUserDto, User, UserDocument} from "../domain/user.entity";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class UsersServices {
-    constructor(@inject(UsersRepository) private usersRepository: UsersRepository) {}
+    constructor(@inject(TYPES.UsersRepository) private usersRepository: UsersRepository) {}
     async createUser(user: CreateUserInputModel) {
         const result = new Result<string>()
         const {login, password, email} = user

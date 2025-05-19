@@ -31,11 +31,12 @@ import {RequestsLogsQueryRepository} from "../../../src/features/requestLogs/rep
 import {UserDocument} from "../../../src/features/users/domain/user.entity";
 import {hashServices} from "../../../src/common/adapters/hashServices";
 import {DB} from "../../../src/common/module/db/DB";
+import {TYPES} from "../../../src/ioc-types";
 
 describe(`<<AUTH>> ENDPOINTS TESTING!!!`, ()=>{
 
     const app=initApp()
-    const db = container.get<DB>(DB)
+    const db = container.get<DB>(TYPES.DB)
 
     beforeAll(async () => {
         spySendMail = jest.spyOn(nodemailerServices,'sendEmail').mockResolvedValue(true);//отключаем отправку писем

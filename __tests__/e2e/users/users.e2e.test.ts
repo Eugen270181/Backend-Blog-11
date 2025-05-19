@@ -14,12 +14,13 @@ import {routersPaths} from "../../../src/common/settings/paths";
 import {UserOutputModel} from "../../../src/features/users/types/output/userOutput.type";
 import {validateErrorsObject} from "../validateErrorsObject";
 import {DB} from "../../../src/common/module/db/DB";
+import {TYPES} from "../../../src/ioc-types";
 
 
 describe(`<<USERS>> ENDPOINTS TESTING!!!`, () => {
 
     const app = initApp()
-    const db = container.get<DB>(DB)
+    const db = container.get<DB>(TYPES.DB)
 
     beforeAll(async () => {
         //const mongoServer = await MongoMemoryServer.create()

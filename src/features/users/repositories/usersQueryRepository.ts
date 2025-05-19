@@ -6,12 +6,13 @@ import {Pagination} from "../../../common/types/pagination.type";
 import {User, UserModelType} from "../domain/user.entity";
 import {DB} from "../../../common/module/db/DB";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class UsersQueryRepository {
     private userModel: UserModelType
 
-    constructor(@inject(DB) private db: DB) {
+    constructor(@inject(TYPES.DB) private db: DB) {
         this.userModel = db.getModels().UserModel
     }
     async findUserById(_id: string) {

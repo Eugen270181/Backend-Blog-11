@@ -6,12 +6,13 @@ import {CommentsRepository} from "../../comments/repositories/commentsRepository
 import {ILikeCommentDto, LikeComment, LikeCommentDocument} from "../domain/likeComment.entity";
 import {LikeStatus} from "../../../common/types/enum/likeStatus";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class LikesCommentsServices {
-    constructor(@inject(LikesCommentsRepository) private likesCommentsRepository: LikesCommentsRepository,
-                @inject(UsersRepository) private usersRepository: UsersRepository,
-                @inject(CommentsRepository) private commentsRepository: CommentsRepository) {}
+    constructor(@inject(TYPES.LikesCommentsRepository) private likesCommentsRepository: LikesCommentsRepository,
+                @inject(TYPES.UsersRepository) private usersRepository: UsersRepository,
+                @inject(TYPES.CommentsRepository) private commentsRepository: CommentsRepository) {}
     async updateCommentLike(likeInput: LikeInputModel, commentId:string, userId:string) {
         const newLikeCommentStatus = likeInput.likeStatus
         if (!(newLikeCommentStatus in LikeStatus)) return ResultStatus.BadRequest;

@@ -5,11 +5,12 @@ import {PostsRepository} from "../repositories/postsRepository";
 import {IPostDto, Post, PostDocument} from "../domain/post.entity";
 import {BlogDocument} from "../../blogs/domain/blog.entity";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class PostsServices {
-    constructor(@inject(BlogsRepository) private blogsRepository: BlogsRepository,
-                @inject(PostsRepository) private postsRepository: PostsRepository) {}
+    constructor(@inject(TYPES.BlogsRepository) private blogsRepository: BlogsRepository,
+                @inject(TYPES.PostsRepository) private postsRepository: PostsRepository) {}
     async createPost(post: CreatePostInputModel):Promise<string | null> {
         const {title, shortDescription, content, blogId} = post
 

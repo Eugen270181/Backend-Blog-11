@@ -1,11 +1,12 @@
 import {UsersRepository} from "../users/repositories/usersRepository";
 import {body} from "express-validator";
 import {inject, injectable} from "inversify";
+import {TYPES} from "../../ioc-types";
 
 @injectable()
 export class AuthValidation {
 
-    constructor(@inject(UsersRepository) private usersRepository: UsersRepository) {}
+    constructor(@inject(TYPES.UsersRepository) private usersRepository: UsersRepository) {}
 
     uniqueLoginValidator = async (login: string) => {
         const user = await this.usersRepository.findUserByLogin(login);

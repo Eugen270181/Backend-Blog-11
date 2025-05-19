@@ -20,13 +20,14 @@ import {jwtServices} from "../../../src/common/adapters/jwtServices";
 import {OutputErrorsType} from "../../../src/common/types/outputErrors.type";
 import {validateErrorsObject} from "../validateErrorsObject";
 import {DB} from "../../../src/common/module/db/DB";
+import {TYPES} from "../../../src/ioc-types";
 
 
 
 describe('/comments',  () => {
 
     const app=initApp()
-    const db = container.get<DB>(DB)
+    const db = container.get<DB>(TYPES.DB)
 
     beforeAll(async () => {
         //const mongoServer = await MongoMemoryServer.create()

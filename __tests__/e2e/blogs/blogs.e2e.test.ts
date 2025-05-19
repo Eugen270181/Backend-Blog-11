@@ -12,6 +12,7 @@ import {createBlog, getBlogById, getBlogs, getBlogsQty} from "./utils/createGetB
 import {validateErrorsObject} from "../validateErrorsObject";
 import {container} from "../../../src/composition-root";
 import {DB} from "../../../src/common/module/db/DB";
+import {TYPES} from "../../../src/ioc-types";
 
 
 //import {MongoMemoryServer} from "mongodb-memory-server";
@@ -19,7 +20,7 @@ import {DB} from "../../../src/common/module/db/DB";
 describe(`<<BLOGS>> ENDPOINTS TESTING!!!`, ()=>{
 
     const app=initApp()
-    const db = container.get<DB>(DB)
+    const db = container.get<DB>(TYPES.DB)
 
     beforeAll(async () => {
         //const mongoServer = await MongoMemoryServer.create()

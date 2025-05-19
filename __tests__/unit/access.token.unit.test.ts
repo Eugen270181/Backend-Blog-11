@@ -3,7 +3,12 @@ import {ResultStatus} from "../../src/common/types/enum/resultStatus";
 import {jwtServices} from "../../src/common/adapters/jwtServices";
 import {container} from "../../src/composition-root";
 import {DB} from "../../src/common/module/db/DB";
+import {TYPES} from "../../src/ioc-types";
+import {AuthServices} from "../../src/features/auth/services/authServices";
+import {UsersRepository} from "../../src/features/users/repositories/usersRepository";
 
+const authServices = container.get<AuthServices>(TYPES.AuthServices)
+const usersRepository = container.get<UsersRepository>(TYPES.UsersRepository)
 
 describe('UNIT', () => {
 
@@ -24,8 +29,9 @@ describe('UNIT', () => {
     })
 
     afterAll((done) => done())
-//TODO
+
     const checkAccessTokenUseCase = authServices.checkAccessToken
+
     it('should not verify noBearer auth', async () => {
         const result = await checkAccessTokenUseCase('Basic gbfbfbbhf')
 

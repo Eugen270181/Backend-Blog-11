@@ -3,14 +3,15 @@ import {PostsController} from "./controllers/posts.controller";
 import {ValidationMiddlewares} from "../../common/middleware/validationMiddlewares";
 import {ShieldMiddlewares} from "../../common/middleware/guardMiddlewares";
 import {container} from "../../composition-root";
+import {TYPES} from "../../ioc-types";
 
 
 
 export const postsRouter = Router()
 
-const guardInstance = container.get<ShieldMiddlewares>(ShieldMiddlewares)
-const validationInstance = container.get<ValidationMiddlewares>(ValidationMiddlewares)
-const postsInstance = container.get<PostsController>(PostsController)
+const guardInstance = container.get<ShieldMiddlewares>(TYPES.ShieldMiddlewares)
+const validationInstance = container.get<ValidationMiddlewares>(TYPES.ValidationMiddlewares)
+const postsInstance = container.get<PostsController>(TYPES.PostsController)
 
 
 postsRouter.get('/',
