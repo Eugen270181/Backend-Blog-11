@@ -1,6 +1,5 @@
 import {WithId} from "mongodb"
 import {BlogOutputModel} from "../types/output/blogOutput.model";
-import {DB} from "../../../common/module/db/DB";
 import {Pagination} from "../../../common/types/pagination.type";
 import {BlogsQueryFilterType} from "../types/blogsQueryFilter.type";
 import {Blog, BlogModelType} from "../domain/blog.entity";
@@ -9,11 +8,8 @@ import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class BlogsQueryRepository {
-    private blogModel:BlogModelType
 
-    constructor(@inject(TYPES.DB) private db: DB) {
-        this.blogModel = db.getModels().BlogModel
-    }
+    constructor(@inject(TYPES.BlogModel) private blogModel: BlogModelType) { }
     async findBlogById(_id: string):Promise< WithId<Blog> | null > {
         return this.blogModel.findOne({ _id, deletedAt:null}).lean().catch(() => null);
     }

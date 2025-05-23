@@ -1,15 +1,12 @@
 import {CommentDocument, CommentModelType} from "../domain/comment.entity";
-import {DB} from "../../../common/module/db/DB";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class CommentsRepository {
-    private commentModel:CommentModelType
 
-    constructor(@inject(TYPES.DB) private db: DB) {
-        this.commentModel = db.getModels().CommentModel
-    }
+    constructor(@inject(TYPES.CommentModel) private commentModel:CommentModelType
+    ) {}
 
     async save(commentDocument: CommentDocument):Promise<void> {
         await commentDocument.save()

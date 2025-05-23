@@ -1,15 +1,11 @@
 import {BlogDocument, BlogModelType} from "../domain/blog.entity";
-import {DB} from "../../../common/module/db/DB";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class BlogsRepository {
-    private blogModel:BlogModelType
-//TODO
-    constructor(@inject(TYPES.DB) private db: DB) {
-        this.blogModel = db.getModels().BlogModel
-    }
+
+    constructor(@inject(TYPES.BlogModel) private blogModel: BlogModelType) { }
 
     async save(blogDocument: BlogDocument):Promise<void> {
         await blogDocument.save();

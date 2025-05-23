@@ -34,10 +34,18 @@ import {LikeValidation} from "./features/likes/likeValidation";
 import {QueryValidation} from "./common/middleware/queryValidation";
 import {ValidationMiddlewares} from "./common/middleware/validationMiddlewares";
 import {ShieldMiddlewares} from "./common/middleware/guardMiddlewares";
-import {container} from "./composition-root";
 
 export const TYPES = {
     DB: Symbol.for('DB'),
+
+    BlogModel: Symbol.for('BlogModel'),
+    PostModel: Symbol.for('PostModel'),
+    CommentModel: Symbol.for('CommentModel'),
+    UserModel: Symbol.for('UserModel'),
+    RequestLogModel: Symbol.for('RequestLogModel'),
+    SessionModel: Symbol.for('SessionModel'),
+    LikeCommentModel: Symbol.for('LikeCommentModel'),
+    LikePostModel: Symbol.for('LikePostModel'),
 
     UsersRepository: Symbol.for('UsersRepository'),
     UsersQueryRepository: Symbol.for('UsersQueryRepository'),

@@ -1,11 +1,7 @@
-import {HydratedDocument, Model, Schema} from "mongoose";
+import {HydratedDocument, model, Model, Schema} from "mongoose";
 import {codeServices} from "../../../common/adapters/codeServices";
 import {appConfig} from "../../../common/settings/config";
 import {dateServices} from "../../../common/adapters/dateServices";
-import {container} from "../../../composition-root";
-import {DB} from "../../../common/module/db/DB";
-import {TYPES} from "../../../ioc-types";
-
 
 
 export interface IUserDto {
@@ -42,10 +38,7 @@ export class User {
         user.passwordHash = hash
         user.createdAt = new Date()
 
-        const db = container.get<DB>(TYPES.DB)
-        const userModel = db.getModels().UserModel
-
-        return new userModel(user) as UserDocument
+        return new UserModel(user) as UserDocument
     }
 
     static createUserByReg({ login, email, hash }:IUserDto) {
@@ -99,8 +92,12 @@ export const userSchema:Schema<User> = new Schema<User>({
     passConfirmation: { type: passConfirmationSchema, nullable:true, default: null },
 })
 
+userSchema.index({ login: 1, email: 1 }, { unique: true });
+
 userSchema.loadClass(User)
 
 export type UserModelType = Model<User>
 
 export type UserDocument = HydratedDocument<User>
+
+export const UserModel:UserModelType = model<User, UserModelType>(User.name, userSchema)

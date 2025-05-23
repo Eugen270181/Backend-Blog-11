@@ -1,7 +1,5 @@
-import {HydratedDocument, Model, Schema} from "mongoose";
-import {container} from "../../../composition-root";
-import {DB} from "../../../common/module/db/DB";
-import {TYPES} from "../../../ioc-types";
+import {HydratedDocument, model, Model, Schema} from "mongoose";
+
 
 
 
@@ -35,9 +33,6 @@ export class Session {
         session.lastActiveDate = sessionDto.lastActiveDate
         session.expDate = sessionDto.expDate
 
-        const db = container.get<DB>(TYPES.DB)
-        const SessionModel = db.getModels().SessionModel
-
         return new SessionModel(session) as SessionDocument
     }
     updateSession( updateDto: ITimeSessionDto ){
@@ -61,3 +56,5 @@ sessionSchema.loadClass(Session)
 export type SessionModelType = Model<Session>
 
 export type SessionDocument = HydratedDocument<Session>;
+
+export const SessionModel:SessionModelType = model<Session, SessionModelType>(Session.name, sessionSchema)

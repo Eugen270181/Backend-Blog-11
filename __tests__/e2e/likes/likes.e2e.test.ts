@@ -1,3 +1,4 @@
+import {container} from "../../../src/composition-root";
 import {PostOutputModel} from "../../../src/features/posts/types/output/postOutput.model";
 import {testingDtosCreator, TokensDto} from "../testingDtosCreator";
 import {UserOutputModel} from "../../../src/features/users/types/output/userOutput.type";
@@ -11,11 +12,10 @@ import {LikeStatus} from "../../../src/common/types/enum/likeStatus";
 import {checkCommentLikeData, checkPostLikeData, createCommentLike, createPostLike} from "./util/createGetLikes";
 import {routersPaths} from "../../../src/common/settings/paths";
 import {jwtServices} from "../../../src/common/adapters/jwtServices";
-import {LikePostDocument} from "../../../src/features/likes/domain/likePost.entity";
+import {LikePostDocument, LikePostModelType} from "../../../src/features/likes/domain/likePost.entity";
 import {createPostComments, getCommentById} from "../comments/util/createGetComments";
 import {CommentOutputModel} from "../../../src/features/comments/types/output/commentOutput.model";
-import {LikeCommentDocument} from "../../../src/features/likes/domain/likeComment.entity";
-import {container} from "../../../src/composition-root";
+import {LikeCommentDocument, LikeCommentModelType} from "../../../src/features/likes/domain/likeComment.entity";
 import {DB} from "../../../src/common/module/db/DB";
 import {TYPES} from "../../../src/ioc-types";
 
@@ -44,8 +44,8 @@ describe('LIKE_TESTS',  () => {
         done();
     })
 
-    const LikePostModel = db.getModels().LikePostModel
-    const LikeCommentModel = db.getModels().LikeCommentModel
+    const likePostModel = container.get<LikePostModelType>(TYPES.LikePostModel)
+    const likeCommentModel = container.get<LikeCommentModelType>(TYPES.LikeCommentModel)
 
     const noneLikeDto = { likeStatus: LikeStatus.None }
     const likeDto = { likeStatus: LikeStatus.Like }
@@ -71,7 +71,7 @@ describe('LIKE_TESTS',  () => {
             //3. Создание валидного лайка юзера 1 к первому посту
             await createPostLike(app, tokens[0].accessToken, posts[0].id, likeDto)
             //4. Проверка создания через БД лайка поста, так как нет гет-запросов по лайкам
-            const foundPostLikeInDB: LikePostDocument = await LikePostModel
+            const foundPostLikeInDB: LikePostDocument = await likePostModel
                 .findOne({ authorId: users[0].id , postId: posts[0].id })
                 .lean() as LikePostDocument
             expect(foundPostLikeInDB.status).toBe(LikeStatus.Like)
@@ -126,17 +126,17 @@ describe('LIKE_TESTS',  () => {
         it(`changeLikePostInDb`, async () => {
 
             await createPostLike(app, tokens[0].accessToken, posts[0].id, dislikeDto)
-            const foundPostLikeInDB1: LikePostDocument = await LikePostModel
+            const foundPostLikeInDB1: LikePostDocument = await likePostModel
                 .findOne({ authorId: users[0].id , postId: posts[0].id })
                 .lean() as LikePostDocument
             expect(foundPostLikeInDB1.status).toBe(LikeStatus.Dislike)
             await createPostLike(app, tokens[0].accessToken, posts[0].id, likeDto)
-            const foundPostLikeInDB2: LikePostDocument = await LikePostModel
+            const foundPostLikeInDB2: LikePostDocument = await likePostModel
                 .findOne({ authorId: users[0].id , postId: posts[0].id })
                 .lean() as LikePostDocument
             expect(foundPostLikeInDB2.status).toBe(LikeStatus.Like)
             await createPostLike(app, tokens[0].accessToken, posts[0].id, noneLikeDto)
-            const foundPostLikeInDB3: LikePostDocument = await LikePostModel
+            const foundPostLikeInDB3: LikePostDocument = await likePostModel
                 .findOne({ authorId: users[0].id , postId: posts[0].id })
                 .lean() as LikePostDocument
             expect(foundPostLikeInDB3.status).toBe(LikeStatus.None)
@@ -188,7 +188,7 @@ describe('LIKE_TESTS',  () => {
             //3. Создание валидного лайка юзера 1 к первому комменту
             await createCommentLike(app, tokens[0].accessToken, comments[0].id, likeDto)
             //4. Проверка создания через БД лайка поста, так как нет гет-запросов по лайкам
-            const foundCommentLikeInDB: LikeCommentDocument = await LikeCommentModel
+            const foundCommentLikeInDB: LikeCommentDocument = await likeCommentModel
                 .findOne({ authorId: users[0].id , commentId: comments[0].id })
                 .lean() as LikeCommentDocument
             expect(foundCommentLikeInDB.status).toBe(LikeStatus.Like)
@@ -234,19 +234,19 @@ describe('LIKE_TESTS',  () => {
         it(`changeLikeCommentInDb`, async () => {
 
             await createCommentLike(app, tokens[0].accessToken, comments[0].id, dislikeDto)
-            const foundCommentLikeInDB1: LikeCommentDocument = await LikeCommentModel
+            const foundCommentLikeInDB1: LikeCommentDocument = await likeCommentModel
                 .findOne({ authorId: users[0].id , commentId: comments[0].id })
                 .lean() as LikeCommentDocument
             expect(foundCommentLikeInDB1.status).toBe(LikeStatus.Dislike)
 
             await createCommentLike(app, tokens[0].accessToken, comments[0].id, likeDto)
-            const foundCommentLikeInDB2: LikeCommentDocument = await LikeCommentModel
+            const foundCommentLikeInDB2: LikeCommentDocument = await likeCommentModel
                 .findOne({ authorId: users[0].id , commentId: comments[0].id })
                 .lean() as LikeCommentDocument
             expect(foundCommentLikeInDB2.status).toBe(LikeStatus.Like)
 
             await createCommentLike(app, tokens[0].accessToken, comments[0].id, noneLikeDto)
-            const foundCommentLikeInDB3: LikeCommentDocument = await LikeCommentModel
+            const foundCommentLikeInDB3: LikeCommentDocument = await likeCommentModel
                 .findOne({ authorId: users[0].id , commentId: comments[0].id })
                 .lean() as LikeCommentDocument
             expect(foundCommentLikeInDB3.status).toBe(LikeStatus.None)

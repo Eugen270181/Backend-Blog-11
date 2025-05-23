@@ -28,7 +28,7 @@ import {
 } from "./utils/createGetAuth";
 import {RequestsLogsRepository} from "../../../src/features/requestLogs/repositories/requestsLogsRepository";
 import {RequestsLogsQueryRepository} from "../../../src/features/requestLogs/repositories/requestsLogsQueryRepository";
-import {UserDocument} from "../../../src/features/users/domain/user.entity";
+import {UserDocument, UserModelType} from "../../../src/features/users/domain/user.entity";
 import {hashServices} from "../../../src/common/adapters/hashServices";
 import {DB} from "../../../src/common/module/db/DB";
 import {TYPES} from "../../../src/ioc-types";
@@ -72,7 +72,7 @@ describe(`<<AUTH>> ENDPOINTS TESTING!!!`, ()=>{
         done()
     })
     const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-    const UserModel = db.getModels().UserModel;
+    const UserModel = container.get<UserModelType>(TYPES.UserModel)
 
     const noValidRegUserDto: RegistrationDto = { login: '', email: 'hhh', password: 'hh' }
     const noValidLoginDto: LoginDto = { loginOrEmail: '', password: 'hh' }

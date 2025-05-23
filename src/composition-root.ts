@@ -39,10 +39,28 @@ import {QueryValidation} from "./common/middleware/queryValidation";
 import {ShieldMiddlewares} from "./common/middleware/guardMiddlewares";
 import {ValidationMiddlewares} from "./common/middleware/validationMiddlewares";
 import {TYPES} from "./ioc-types";
+import {BlogModel, BlogModelType} from "./features/blogs/domain/blog.entity";
+import {PostModel, PostModelType} from "./features/posts/domain/post.entity";
+import {CommentModel, CommentModelType} from "./features/comments/domain/comment.entity";
+import {UserModel, UserModelType} from "./features/users/domain/user.entity";
+import {RequestLogModel, RequestLogModelType} from "./features/requestLogs/domain/requestsLog.entity";
+import {SessionModel, SessionModelType} from "./features/security/domain/session.entity";
+import {LikePostModel, LikePostModelType} from "./features/likes/domain/likePost.entity";
+import {LikeCommentModel, LikeCommentModelType} from "./features/likes/domain/likeComment.entity";
 //...
 export const container = new Container();
 //////////////////DB//////////////////////////////////////////////////////
 container.bind<DB>(TYPES.DB).to(DB).inSingletonScope();
+
+container.bind<BlogModelType>(TYPES.BlogModel).toConstantValue(BlogModel);
+container.bind<PostModelType>(TYPES.PostModel).toConstantValue(PostModel);
+container.bind<CommentModelType>(TYPES.CommentModel).toConstantValue(CommentModel);
+container.bind<UserModelType>(TYPES.UserModel).toConstantValue(UserModel);
+container.bind<RequestLogModelType>(TYPES.RequestLogModel).toConstantValue(RequestLogModel);
+container.bind<SessionModelType>(TYPES.SessionModel).toConstantValue(SessionModel);
+container.bind<LikeCommentModelType>(TYPES.LikeCommentModel).toConstantValue(LikeCommentModel);
+container.bind<LikePostModelType>(TYPES.LikePostModel).toConstantValue(LikePostModel);
+
 //////////////////DAL - Repositories//////////////////////////////////////
 container.bind<UsersRepository>(TYPES.UsersRepository).to(UsersRepository);
 container.bind<UsersQueryRepository>(TYPES.UsersQueryRepository).to(UsersQueryRepository)

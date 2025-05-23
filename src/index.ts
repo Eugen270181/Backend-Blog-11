@@ -1,10 +1,10 @@
-import 'reflect-metadata'; // Должен быть первым!
+//import 'reflect-metadata'; // Должен быть первым!
+import {container} from "./composition-root";
 import {Request, Response} from 'express'
 import {appConfig} from './common/settings/config'
 import {initApp} from "./initApp";
 import {routersPaths} from "./common/settings/paths";
 import {DB} from "./common/module/db/DB";
-import {container} from "./composition-root";
 import { TYPES } from './ioc-types';
 
 const app = initApp()

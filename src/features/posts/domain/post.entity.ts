@@ -1,7 +1,4 @@
-import {Model, HydratedDocument, Schema} from 'mongoose';
-import {container} from "../../../composition-root";
-import {DB} from "../../../common/module/db/DB";
-import {TYPES} from "../../../ioc-types";
+import {Model, HydratedDocument, Schema, model} from 'mongoose';
 
 
 export interface IPostDto {
@@ -32,10 +29,7 @@ export class Post {
         post.blogName = blogName
         post.createdAt = new Date()
 
-        const db = container.get<DB>(TYPES.DB)
-        const postModel = db.getModels().PostModel
-
-        return new postModel(post) as PostDocument
+        return new PostModel(post) as PostDocument
     }
     deletePost(){
         this.deletedAt = new Date()
@@ -66,5 +60,7 @@ postSchema.loadClass(Post)
 export type PostModelType = Model<Post>
 
 export type PostDocument = HydratedDocument<Post>
+
+export const PostModel: PostModelType = model<Post, PostModelType>(Post.name, postSchema)
 
 

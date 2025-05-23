@@ -4,17 +4,15 @@ import {MeOutputModel} from "../../auth/types/output/meOutput.model";
 import {UsersQueryFilterType} from "../types/usersQueryFilter.type";
 import {Pagination} from "../../../common/types/pagination.type";
 import {User, UserModelType} from "../domain/user.entity";
-import {DB} from "../../../common/module/db/DB";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class UsersQueryRepository {
-    private userModel: UserModelType
 
-    constructor(@inject(TYPES.DB) private db: DB) {
-        this.userModel = db.getModels().UserModel
-    }
+    constructor(@inject(TYPES.UserModel) private userModel: UserModelType
+    ) {}
+
     async findUserById(_id: string) {
         return this.userModel.findById(_id).catch(()=> null )
     }

@@ -2,7 +2,6 @@ import {WithId} from "mongodb"
 import {SortQueryFilterType} from "../../../common/types/sortQueryFilter.type";
 import {pagPostOutputModel} from "../types/output/pagPostOutput.model";
 import {Post, PostModelType} from "../domain/post.entity";
-import {DB} from "../../../common/module/db/DB";
 import {LikesPostsRepository} from "../../likes/repository/likesPostsRepository";
 import {LikeStatus} from "../../../common/types/enum/likeStatus";
 import {LikeDetailOutputModel} from "../../likes/types/output/extendedLikesInfoOutputModel";
@@ -13,13 +12,11 @@ import {TYPES} from "../../../ioc-types";
 
 @injectable()
 export class PostsQueryRepository {
-    private postModel:PostModelType
 
-    constructor(@inject(TYPES.DB) private db: DB,
+    constructor(@inject(TYPES.PostModel) private postModel: PostModelType,
                 @inject(TYPES.LikesPostsRepository) private likesPostsRepository: LikesPostsRepository,
-                @inject(TYPES.UsersQueryRepository) private userQueryRepository: UsersQueryRepository) {
-        this.postModel = db.getModels().PostModel
-    }
+                @inject(TYPES.UsersQueryRepository) private userQueryRepository: UsersQueryRepository
+    ) {}
     async findPostById(_id: string):Promise< WithId<Post> | null > {
         return this.postModel.findOne({ _id , deletedAt: null }).lean().catch(()=> null );
     }

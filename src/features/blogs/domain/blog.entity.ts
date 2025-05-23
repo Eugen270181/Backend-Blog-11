@@ -1,8 +1,4 @@
-import {HydratedDocument, Model, Schema} from 'mongoose';
-import {container} from "../../../composition-root";
-import {DB} from "../../../common/module/db/DB";
-import {TYPES} from "../../../ioc-types";
-
+import {HydratedDocument, model, Model, Schema} from 'mongoose';
 
 export interface IBlogDto {
     name: string,
@@ -28,10 +24,10 @@ export class Blog {
         blog.createdAt = new Date()
         blog.isMembership = false
 //TODO!!!!!!!!!!!
-        const db = container.get<DB>(TYPES.DB)
-        const blogModel = db.getModels().BlogModel
+        //const db = container.get<DB>(TYPES.DB)
+        //const blogModel = db.getModels().BlogModel
 
-        return new blogModel(blog) as BlogDocument
+        return new BlogModel(blog) as BlogDocument
     }
 
     deleteBlog() {
@@ -60,3 +56,4 @@ export type BlogModelType = Model<Blog>
 
 export type BlogDocument = HydratedDocument<Blog>
 
+export const BlogModel: BlogModelType = model<Blog, BlogModelType>(Blog.name,blogSchema)

@@ -1,7 +1,4 @@
-import {HydratedDocument, Model, Schema} from "mongoose";
-import {container} from "../../../composition-root";
-import {DB} from "../../../common/module/db/DB";
-import {TYPES} from "../../../ioc-types";
+import {HydratedDocument, model, Model, Schema} from "mongoose";
 
 
 
@@ -34,9 +31,7 @@ export class RequestLog {
         requestLog.url = url;
         requestLog.createdAt = new Date(); // Устанавливаем текущую дату
 
-        const db = container.get<DB>(TYPES.DB)
-        const requestsLogModel = db.getModels().RequestLogModel;
-        return new requestsLogModel(requestLog) as RequestLogDocument;
+        return new RequestLogModel(requestLog) as RequestLogDocument;
     }
 }
 
@@ -57,4 +52,7 @@ export const requestLogSchema = new Schema<RequestLog>({
 requestLogSchema.loadClass(RequestLog);
 
 export type RequestLogModelType = Model<RequestLog>;
+
 export type RequestLogDocument = HydratedDocument<RequestLog>;
+
+export const RequestLogModel:RequestLogModelType = model<RequestLog, RequestLogModelType>(RequestLog.name, requestLogSchema)

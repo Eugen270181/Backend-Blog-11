@@ -1,8 +1,5 @@
-import {HydratedDocument, Model, Schema} from "mongoose";
+import {HydratedDocument, model, Model, Schema} from "mongoose";
 import {LikeStatus} from "../../../common/types/enum/likeStatus";
-import {container} from "../../../composition-root";
-import {DB} from "../../../common/module/db/DB";
-import {TYPES} from "../../../ioc-types";
 
 
 export interface ILikeCommentDto {
@@ -25,10 +22,7 @@ export class LikeComment {
         likeComment.status = status
         likeComment.createdAt = new Date()
 
-        const db = container.get<DB>(TYPES.DB)
-        const likeCommentModel = db.getModels().LikeCommentModel
-
-        return new likeCommentModel(likeComment) as LikeCommentDocument
+        return new LikeCommentModel(likeComment) as LikeCommentDocument
     }
 
     updateLikeComment(newStatus:LikeStatus) {
@@ -48,3 +42,5 @@ likeCommentSchema.loadClass(LikeComment)
 export type LikeCommentModelType = Model<LikeComment>
 
 export type LikeCommentDocument = HydratedDocument<LikeComment>
+
+export const LikeCommentModel:LikeCommentModelType = model<LikeComment, LikeCommentModelType>(LikeComment.name, likeCommentSchema)

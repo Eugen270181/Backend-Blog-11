@@ -1,7 +1,4 @@
-import {HydratedDocument, Model, Schema} from "mongoose";
-import {container} from "../../../composition-root";
-import {DB} from "../../../common/module/db/DB";
-import {TYPES} from "../../../ioc-types";
+import {HydratedDocument, model, Model, Schema} from "mongoose";
 
 
 export interface ICommentDto {
@@ -36,10 +33,7 @@ export class Comment {
         }
         comment.createdAt = new Date()
 
-        const db = container.get<DB>(TYPES.DB)
-        const commentModel = db.getModels().CommentModel
-
-        return new commentModel(comment) as CommentDocument
+        return new CommentModel(comment) as CommentDocument
     }
     deleteComment(){
         this.deletedAt = new Date()
@@ -70,3 +64,5 @@ commentSchema.loadClass(Comment)
 export type CommentModelType = Model<Comment>
 
 export type CommentDocument = HydratedDocument<Comment>;
+
+export const CommentModel:CommentModelType = model<Comment, CommentModelType>(Comment.name, commentSchema)
